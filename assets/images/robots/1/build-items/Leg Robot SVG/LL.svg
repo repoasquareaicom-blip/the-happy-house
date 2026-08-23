@@ -1,0 +1,113 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 849" width="600" height="849">
+	<title>1-default</title>
+	<defs>
+		<clipPath clipPathUnits="userSpaceOnUse" id="cp1">
+			<path d="m1094-51.99v1682.08h-2356.55v-1682.08z"/>
+		</clipPath>
+		<clipPath clipPathUnits="userSpaceOnUse" id="cp2">
+			<path d="m1094-51.99v1682.08h-2356.55v-1682.08z"/>
+		</clipPath>
+	</defs>
+	<style>
+		.s0 { fill: #7c868c } 
+		.s1 { fill: #e1e1df } 
+		.s2 { fill: #bec0be } 
+		.s3 { fill: none;stroke: #525d5f;stroke-linecap: round;stroke-linejoin: round;stroke-width: 6 } 
+		.s4 { fill: none;stroke: #525d5f;stroke-linecap: round;stroke-linejoin: round;stroke-width: 4 } 
+		.s5 { fill: none;stroke: #929092;stroke-linecap: round;stroke-linejoin: round;stroke-width: 6 } 
+		.s6 { fill: none;stroke: #929092;stroke-linecap: round;stroke-linejoin: round;stroke-width: 4 } 
+	</style>
+	<g id="layer1">
+		<g id="Folder 9">
+			<g id="Folder 7">
+				<g id="g255819">
+					<path id="path255821" class="s0" d="m346.4 689.1l-26.2 7.1-8-9.1 4-15.1 9.1-15.2-7.1-17.1v-9.1l4-6 11.1 2 16.2 18.1 1 11.1-9.1 22.2z"/>
+				</g>
+				<g id="g255823">
+					<path id="path255825" class="s1" d="m362.6 722.4h-48.4l6-26.2 29.3-6.1 13.1 14.1z"/>
+				</g>
+				<path id="path255827" fill-rule="evenodd" class="s2" d="m363.6 724.4v9.1h-48.4v-9.1z"/>
+				<g id="g255829">
+					<g id="Clip-Path: g255831" clip-path="url(#cp1)">
+						<g id="g255831">
+							<g id="g255837">
+								<path id="path255839" fill-rule="evenodd" class="s3" d="m321.3 644.4c3 3.4 5 7.6 4.2 12.1-0.7 4.4-3.1 8.4-6.2 11.6-3.7 4-6.5 9.1-6.5 14.5-0.1 5.4 2.9 11 8 13"/>
+							</g>
+							<g id="g255841">
+								<path id="path255843" fill-rule="evenodd" class="s3" d="m346.4 689.1c-3.2-2.7-5.2-6.8-5.3-11 0-4.2 1.8-8.4 5-11.1 3.6-3.2 5.4-8.3 5.5-13.1 0.1-4.8-1.6-9.5-4.8-13.1-2.4-2.7-4.9-4.6-7.2-7.4-2.2-2.9-4.7-5.8-7.9-7.5-3.2-1.6-7.5-1.9-10.3 0.4-2.6 2.1-4.4 5-4.4 8.3 0 3.3 1.2 6.1 3.3 8.5"/>
+							</g>
+							<g id="g255845">
+								<path id="path255847" fill-rule="evenodd" class="s4" d="m340.4 679c0 0-13.8 6-25 3"/>
+							</g>
+							<g id="g255849">
+								<path id="path255851" fill-rule="evenodd" class="s4" d="m340.8 671c0 0-13.5 1.1-18.5-7"/>
+							</g>
+							<g id="g255853">
+								<path id="path255855" fill-rule="evenodd" class="s4" d="m350.6 655.8c0 0-17.5 6.6-25-2.9"/>
+							</g>
+							<g id="g255857">
+								<path id="path255859" fill-rule="evenodd" class="s4" d="m341.9 636.5c-1 1.3-9.3 10-19.7 9.1"/>
+							</g>
+							<g id="g255861">
+								<path id="path255863" fill-rule="evenodd" class="s5" d="m362.6 735.5v-13.1c5-26.2-15.2-32.3-15.2-32.3l-27.2 6.1c0 0-7 5-6 28.2v11.1l9.3-5 7.3 5 7.9-5 7.5 5 6.9-5c0 0 9.5 6 8.5 5"/>
+							</g>
+							<g id="g255865">
+								<path id="path255867" fill-rule="evenodd" class="s6" d="m360.5 722.4h-43.5"/>
+							</g>
+						</g>
+					</g>
+				</g>
+			</g>
+			<g id="Folder 6">
+				<g id="g255869">
+					<path id="path255871" class="s0" d="m333.8 601.4l-24.2 3-2-16.2 5-11 7.1-13.2-4.1-15.1-2-9.1 7.1-8h11.1l8 6 6.1 11.1 2 15.1-10.1 21.2z"/>
+				</g>
+				<g id="g255873">
+					<g id="Clip-Path: g255875" clip-path="url(#cp2)">
+						<g id="g255875">
+							<g id="g255881">
+								<path id="path255883" fill-rule="evenodd" class="s1" d="m319.2 643.7c-10.9 0-19.7-8.8-19.7-19.7 0-10.8 8.8-19.6 19.7-19.6 10.8 0 19.6 8.8 19.6 19.6 0 10.9-8.8 19.7-19.6 19.7z"/>
+							</g>
+							<g id="g255885">
+								<path id="path255887" class="s2" d="m352.9 633.6l-17.1 10.1 3-12.1-1-15.1-11.1-12.1h16.1l10.1 13.1z"/>
+							</g>
+							<g id="g255889">
+								<path id="path255891" class="s2" d="m323.7 629.6h-9.1l-1-9.1 10.1-2z"/>
+							</g>
+							<g id="g255893">
+								<path id="path255895" fill-rule="evenodd" class="s3" d="m309.8 604.6c-2.4-4.8-3.3-10.5-2.5-15.9 0.9-5.4 3.4-10.5 7.2-14.4 3.2-3.2 4.6-8 4.8-12.5 0.2-4.4-1.1-8.9-3.7-12.6"/>
+							</g>
+							<g id="g255897">
+								<path id="path255899" fill-rule="evenodd" class="s3" d="m336.5 601.6c-1.8-3.7-1.5-8.3 0-12.2 1.4-3.9 3.9-7.4 6.3-10.8 7.3-10.1 6.5-24.8-0.5-35.1-2.1-3.2-5-6-7.8-8.5-2.8-2.4-6.3-4.3-10-4.5-3.8-0.2-7.7 1.5-9.6 4.8-2.3 4.1-2.3 9.6 0.6 13.7"/>
+							</g>
+							<g id="g255901">
+								<path id="path255903" fill-rule="evenodd" class="s4" d="m333.8 592.3c-2.1 0.4-16.8 2.6-25.2-3"/>
+							</g>
+							<g id="g255905">
+								<path id="path255907" fill-rule="evenodd" class="s4" d="m338.3 582.4c-1.5-0.2-16.6 0.8-22.7-7.3"/>
+							</g>
+							<g id="g255909">
+								<path id="path255911" fill-rule="evenodd" class="s4" d="m347.9 566.1c-1-1-15.8 7.1-28.6-2"/>
+							</g>
+							<g id="g255913">
+								<path id="path255915" fill-rule="evenodd" class="s4" d="m342.7 544.3c-0.9-0.4-6.9 14.7-22.5 10.3"/>
+							</g>
+							<g id="g255917">
+								<path id="path255919" fill-rule="evenodd" class="s5" d="m319.2 644.7c-11.5 0-20.7-9.2-20.7-20.7 0-11.4 9.2-20.6 20.7-20.6 11.4 0 20.6 9.2 20.6 20.6 0 11.5-9.2 20.7-20.6 20.7z"/>
+							</g>
+							<g id="g255921">
+								<path id="path255923" fill-rule="evenodd" class="s5" d="m352.5 623c0-11.4-9.3-20.6-20.7-20.6l-12.6 1"/>
+							</g>
+							<g id="g255925">
+								<path id="path255927" fill-rule="evenodd" class="s5" d="m352.5 623c0 11.4-9.3 20.7-20.7 20.7l-9.7 0.9"/>
+							</g>
+							<g id="g255929">
+								<path id="path255931" fill-rule="evenodd" class="s6" d="m319.2 630.6c-3.7 0-6.6-2.9-6.6-6.6 0-3.6 2.9-6.5 6.6-6.5 3.6 0 6.5 2.9 6.5 6.5 0 3.7-2.9 6.6-6.5 6.6z"/>
+							</g>
+						</g>
+					</g>
+				</g>
+			</g>
+		</g>
+	</g>
+</svg>

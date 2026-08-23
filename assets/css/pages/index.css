@@ -1,0 +1,316 @@
+/* assets/css/pages/index.css */
+
+/* Banner Section */
+#banner-section {
+    background-repeat:no-repeat;
+    background-size: 100% 100%;
+    background-position: center;
+    color: white;
+    position: relative;
+    height:80vh;
+}
+
+.video-banner{
+    margin-top: -75px;
+}
+
+.container {
+    width: 90%;
+    margin: 0 auto;
+}
+
+/* Top Menu inside Banner */
+#top-menu {
+    display: flex;
+    justify-content: space-between;
+    align-items: top;
+    position: absolute;
+    top: 20px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 10;
+}
+
+#top-menu .logo a {
+    display: inline-block;
+    
+}
+
+
+
+/* Banner Content */
+.banner-content {
+    text-align: center;
+    padding-top: 4rem;
+}
+
+#banner-title {
+    font-size: 3rem;
+}
+
+#banner-description {
+    font-size: 1.5rem;
+}
+/* Product Section */
+#product-section {
+    background-repeat:no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-color: #D3988D;
+    padding: 1rem 0;
+    position: relative;
+    text-align: left; /* Left align the text */
+}
+
+#product-box {
+    width: 45%;
+    color: #FFEEB9;
+    padding: 1rem;
+    border-radius: 12px;
+    margin-left: 2rem;
+    position: relative;
+    box-shadow: 0 0 1rem 0 rgb(0 0 0 / 0%);
+    background-color: #636363c9;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    margin-bottom:7.5rem;
+    border-radius:30px;
+    margin-left:50px;
+}
+@media(max-width:840px)
+{
+    #product-box {
+        margin-bottom:3.5rem;
+    }
+}
+
+#product-text {
+    font-size: 2.5rem;
+    font-weight: 600;
+}
+
+/* Styles for the two lines of text below the product-box */
+#product-content-lines {
+    margin-top: 2rem; 
+    font-weight: 600;
+    text-align: center;
+}
+
+#line-one {
+    font-size: 2.2rem;
+    color: #4C7AA2;
+    margin-bottom: 1rem;
+}
+
+#line-two {
+    font-size: 2.2rem;
+    color: #4C7AA2; /* Different color for the second line */
+}
+.button-orange {
+    display: block;
+    color: #FFFFFF;
+    border: none;
+    padding: 0;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border-radius: 25px;
+    padding-left: 30px;
+    padding-right: 30px;
+    height: 50px;
+    margin-right: 20px;
+    box-shadow: 0 0 1rem 0 rgb(0 0 0 / 0%);
+    background-color: #ffffff69;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+.button-orange:hover {
+    background-color: #5484b2;
+}
+.button-blue {
+    display: inline-block;
+    background-color: #4C7AA2;
+    color: #FFFFFF;
+    border: none;
+    padding: 0.86rem 3rem;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: background-color 0.3s ease;
+    border-radius: 25px
+}
+
+.button-blue:hover {
+    background-color: #2e4961;
+}
+
+#product-description {
+    margin-top: 8rem;
+    font-size: 1.2rem;
+    color: #ffffff;
+    margin-left: 50px;
+    margin-right: 50px;
+    padding: 10px;
+    box-shadow: 0 0 1rem 0 rgb(0 0 0 / 0%);
+    background-color: #b2b2b269;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    border-radius: 30px;
+    padding: 30px;
+    text-align:left;
+    max-width:70%;
+}
+@media(max-width:840px)
+{
+    #product-description {
+          max-width:100%;
+    }
+}
+
+/* About Section */
+#about-section {
+    position: relative;
+    text-align: center;
+    color: #fff;
+    overflow: hidden; /* Ensures no content escapes the section */
+}
+
+#about-bg-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Sends the background image behind the content */
+}
+
+#about-bg-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the image covers the entire section */
+}
+
+#about-content {
+    position: absolute;
+    top:0px;
+    padding: 2rem; /* Adds spacing for content inside the section */
+    max-width: 800px;
+    margin: 0 auto; /* Centers the content horizontally */
+    border-radius: 8px; /* Optional: Rounded corners for the content box */
+    color:#000;
+    text-align: left;
+    font-size: 1.3rem;
+    font-weight: 600;
+ }
+
+
+
+
+/* Download Section */
+#download-section {
+    background: url('../images/download-bg.jpg') no-repeat center center/cover;
+    background-color: #B8D1D9;
+    padding: 4rem 0;
+    text-align: center;
+}
+
+#download-heading {
+    font-size: 2.5rem;
+}
+
+#download-links a {
+    margin: 0 10px;
+}
+
+#playstore-icon, #appstore-icon {
+    width: 150px;
+}
+
+
+
+/* Responsive Styles */
+@media screen and (max-width: 1024px) {
+    /* General */
+    #banner-title {
+        font-size: 2.5rem;
+    }
+
+    #product-list {
+        flex-direction: column;
+    }
+
+    .product {
+        width: 80%;
+        margin-bottom: 2rem;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    /* General */
+    #banner-section
+    {
+        height:40vh;
+    }
+    #banner-title {
+        font-size: 2rem;
+    }
+    #logo-image
+    {
+        width:150px;
+    }
+    #product-box {
+        width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    #product-content-lines 
+    {
+        text-align: center;
+        padding:0px;
+    }
+    #line-one, #line-two {
+        font-size: 1rem; /* Adjust font size for mobile view */
+    }
+    #about-content
+    {
+        position:relative;
+        padding:1rem;
+    }
+    #download-heading {
+        font-size: 2rem;
+    }
+
+    #playstore-icon, #appstore-icon {
+        width: 120px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    /* General */
+    #banner-title {
+        font-size: 1.8rem;
+    }
+
+    #top-menu nav ul {
+        flex-direction: column;
+    }
+
+    #product-list {
+        flex-direction: column;
+    }
+
+    .product {
+        width: 100%;
+    }
+
+    #download-heading {
+        font-size: 1.8rem;
+    }
+
+    #playstore-icon, #appstore-icon {
+        width: 100px;
+    }
+}

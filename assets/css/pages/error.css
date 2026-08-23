@@ -1,0 +1,152 @@
+/* Banner Section */
+#banner-section {
+    background: url('../../images/banner-bg.png') no-repeat center center/cover;
+    color: white;
+    position: relative;
+    height: 80vh;
+}
+
+/* Error Section */
+#error-section {
+    height: 50vh;
+    display: block;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Modal Styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Fixed position */
+    z-index: 1000; /* Ensure it appears on top of other content */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    display: flex;
+    justify-content: center; /* Horizontally center */
+    align-items: center; /* Vertically center */
+    text-align: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    width: 80%;
+    max-width: 500px;
+    position: relative;
+}
+
+/* Close button */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.5rem;
+    color: #555;
+    cursor: pointer;
+}
+
+/* Error icon */
+.modal-icon {
+    font-size: 4rem;
+    color: #ffcc00;
+    margin-bottom: 1rem;
+}
+
+/* Error title */
+#error-title {
+    font-size: 1.5rem;
+    color: #d9534f;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+/* Error message */
+#error-message {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 1.5rem;
+}
+/* Go Back Link */
+.go-back-link {
+    display: inline-flex;
+    align-items: center;
+    color: #d9534f;
+    font-size: 1.1rem;
+    margin-top: 1.5rem;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.go-back-link:hover {
+    color: #b02a2a;
+}
+
+.go-back-link i {
+    margin-right: 8px;
+    font-size: 1.3rem;
+}
+
+
+
+/* Responsive Styles */
+@media screen and (max-width: 1024px) {
+
+}
+
+@media screen and (max-width: 768px) {
+    /* General */
+    #banner-section {
+        height: 70vh;
+    }
+
+    #logo-image {
+        width: 150px;
+    }
+
+    #error-container {
+        width: 90%;
+    }
+
+    #error-page-logo {
+        width: 120px;
+    }
+
+    #error-message {
+        font-size: 1rem;
+    }
+
+    #signup-form input,
+    #signup-submit {
+        font-size: 0.9rem;
+    }
+
+    /* Modal Adjustments */
+    .modal-content {
+        width: 90%;
+        padding: 1.5rem;
+    }
+
+    .modal-icon {
+        font-size: 3rem;
+    }
+
+    #error-title {
+        font-size: 1.3rem;
+    }
+
+    #error-message {
+        font-size: 1rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .modal-content {
+        width: 95%;
+        padding: 1rem;
+    }
+}

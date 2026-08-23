@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg9527"
+   inkscape:version="1.1.2 (b8e25be8, 2022-02-05)"
+   sodipodi:docname="robot-1-backpack.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview9529"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.32026165"
+     inkscape:cx="157.68357"
+     inkscape:cy="554.23434"
+     inkscape:window-width="1799"
+     inkscape:window-height="959"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs9524">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath255835">
+      <path
+         d="M 0,1668 H 2338 V 0 H 0 Z"
+         id="path255833" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath255879">
+      <path
+         d="M 0,1668 H 2338 V 0 H 0 Z"
+         id="path255877" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath255949">
+      <path
+         d="M 0,1668 H 2338 V 0 H 0 Z"
+         id="path255947" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath255993">
+      <path
+         d="M 0,1668 H 2338 V 0 H 0 Z"
+         id="path255991" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath256165">
+      <path
+         d="M 0,1668 H 2338 V 0 H 0 Z"
+         id="path256163" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath256237">
+      <path
+         d="M 0,1668 H 2338 V 0 H 0 Z"
+         id="path256235" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath256353">
+      <path
+         d="M 0,1668 H 2338 V 0 H 0 Z"
+         id="path256351" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath256425">
+      <path
+         d="M 0,1668 H 2338 V 0 H 0 Z"
+         id="path256423" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath256477">
+      <path
+         d="M 0,1668 H 2338 V 0 H 0 Z"
+         id="path256475" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath256565">
+      <path
+         d="M 0,1668 H 2338 V 0 H 0 Z"
+         id="path256563" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath256657">
+      <path
+         d="M 0,1668 H 2338 V 0 H 0 Z"
+         id="path256655" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath256057">
+      <path
+         d="M 0,1668 H 2338 V 0 H 0 Z"
+         id="path256055" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath256565-0">
+      <path
+         d="M 0,1668 H 2338 V 0 H 0 Z"
+         id="path256563-2" />
+    </clipPath>
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g256159"
+       transform="matrix(0.35277777,0,0,-0.35277777,-441.89335,570.24512)">
+      <g
+         id="g256161"
+         clip-path="url(#clipPath256165)">
+        <g
+           id="g256179"
+           transform="translate(1411.6047,1151.9923)">
+          <path
+             d="M 0,0 47,-2 72,21 V 126 L 48,147 2,148 -22,122 V 28 Z"
+             style="fill:#aac9a0;fill-opacity:1;fill-rule:nonzero;stroke:none"
+             id="path256181" />
+        </g>
+        <g
+           id="g256183"
+           transform="translate(1431.5847,1301.9923)">
+          <path
+             d="m 0,0 h 12.04 c 23.185,0 41.98,-18.795 41.98,-41.98 v -69.04 C 54.02,-134.205 35.225,-153 12.04,-153 H 0 c -23.185,0 -41.98,18.795 -41.98,41.98 v 69.04 C -41.98,-18.795 -23.185,0 0,0 Z"
+             style="fill:none;stroke:#6e875a;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+             id="path256185" />
+        </g>
+        <g
+           id="g256187"
+           transform="translate(1389.6047,1245.0123)">
+          <path
+             d="m 0,0 h 6.83 c 3.34,0 6.05,2.7 6.06,6.05 l 0.02,8.37 c 0.05,17.42 14.24,31.49 31.66,31.39 l 12.88,-0.07"
+             style="fill:none;stroke:#6e875a;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+             id="path256189" />
+        </g>
+        <g
+           id="g256191"
+           transform="translate(1411.0146,1228.9923)">
+          <path
+             d="m 0,0 h 12.18 c 4.092,0 7.41,-3.318 7.41,-7.41 v -34.18 c 0,-4.092 -3.318,-7.41 -7.41,-7.41 H 0 c -4.092,0 -7.41,3.318 -7.41,7.41 V -7.41 C -7.41,-3.318 -4.092,0 0,0 Z"
+             style="fill:none;stroke:#6e875a;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+             id="path256193" />
+        </g>
+        <g
+           id="g256195"
+           transform="translate(1404.6047,1210.9923)">
+          <path
+             d="m 0,0 7.74,-4.81 c 2.91,-1.81 6.6,-1.8 9.5,0.03 L 26,0.74"
+             style="fill:none;stroke:#6e875a;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+             id="path256197" />
+        </g>
+      </g>
+    </g>
+    <g
+       id="g18902"
+       transform="translate(-0.33977796,0.34548757)"
+       style="opacity:0;fill:#ffffff">
+      <rect
+         style="opacity:0.296935;fill:#ffffff;stroke:#000000;stroke-width:0.575349;stroke-linejoin:bevel"
+         id="rect18707"
+         width="593.91504"
+         height="845.66705"
+         x="1254.688"
+         y="-1617.8835"
+         transform="matrix(0.35277777,0,0,0.35277777,-441.89335,570.24511)"
+         ry="0" />
+    </g>
+  </g>
+</svg>

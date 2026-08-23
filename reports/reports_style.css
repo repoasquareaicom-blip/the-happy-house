@@ -1,0 +1,20 @@
+.back-link { cursor: pointer; color: #8F5F58; font-weight: bold; text-decoration: none; }
+.back-link:hover { text-decoration: underline; }
+.hidden { display: none; }
+
+#result-container table {
+    text-align: left;
+}
+
+#result-container table th,
+#result-container table td {
+    text-align: left;
+}
+table {
+    border: 1px solid gray;
+}
+
+table th, table td {
+    border: 1px solid gray;
+    text-align: left;
+}

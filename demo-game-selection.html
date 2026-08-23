@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Selection</title>
+    <style>
+        /* CSS Variables for theming */
+        :root {
+            --color1: #000; /* default fallback for main theme */
+            --color2: #FFF; /* default fallback for main theme */
+            --color1-rgb: 0, 0, 0; /* Default RGB fallback */
+            --color2-rgb: 255, 255, 255; /* Default RGB fallback */
+
+            /* Colors for the Bright & Elegant Modal - dynamically set by JS */
+            --color3: #000; /* Default (will be overwritten by JS for heading/hover effects) */
+            --color4: #FFF; /* Default (will be overwritten by JS for modal background) */
+            --color3-rgb: 0, 0, 0; /* Default (will be overwritten by JS) */
+            --color4-rgb: 255, 255, 255; /* Default (will be overwritten by JS) */
+        }
+
+        /* Basic HTML/Body Reset and Font */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden; /* Prevent scrolling if content exceeds viewport */
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+
+        /* Main Game Area Container */
+        .game-area {
+            position: absolute;
+            /* Center the game area (its size will be set by JS) */
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            
+            z-index: 2; /* Above the border image */
+            display: flex;
+            align-items: center;    /* Vertically center content within game-area */
+            justify-content: center; /* Horizontally center content within game-area */
+            flex-direction: column; /* Stack header and content vertically */
+            background-color: var(--color2); /* Background color based on theme */
+            /* Width and Height will be set by JavaScript to match the border */
+        }
+
+        /* Decorative Border/Frame Image */
+        #border {
+            position: absolute;
+            top: 0;
+            left: 50%; /* Start from the middle */
+            transform: translateX(-50%); /* Move back by half its own width */
+            width: auto; /* Preserve aspect ratio */
+            height: 100vh; /* Fill full viewport height */
+            z-index: 1; /* Below game-area content */
+        }
+
+        /* Game Selection Header */
+        .game-settings {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 600;
+            color: #333; /* Dark text for readability */
+            margin: 2rem 0 1rem; /* Spacing */
+            z-index: 3; /* Ensure it's above the border */
+        }
+
+        /* Grid for Game Boxes */
+        .games-grid {
+            display: flex;
+            flex-wrap: wrap; /* Allow items to wrap to next line */
+            justify-content: center; /* Center boxes horizontally */
+            gap: 2rem; /* Space between game boxes */
+            padding: 1rem;
+            max-width: 1000px; /* Max width for grid, to prevent overflow on very narrow borders */
+            margin: 0 auto; /* Center the grid itself */
+            z-index: 3; /* Ensure it's above the border */
+        }
+
+        /* Individual Game Box Styling */
+        .game-box {
+            width: 250px;
+            height: calc(16vh); /* Height relative to viewport */
+            background-size: cover; /* Cover the entire box with background image */
+            background-position: center; /* Center the background image */
+            border-radius: 16px; /* Rounded corners */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            position: relative;
+            cursor: pointer; /* Pointer cursor on hover */
+            transition: transform 0.2s ease; /* Smooth hover effect */
+            border: 2px solid rgba(0, 0, 0, 0.1); /* Light border */
+        }
+
+        .game-box:hover {
+            transform: translateY(-5px); /* Lift effect on hover */
+        }
+
+        /* Label for Game Box */
+        .game-label {
+            position: absolute;
+            bottom: -2px; /* Position at the bottom of the box */
+            left: -2px; /* Align with left border */
+            width: calc(100% - 4px); /* Full width minus border thickness */
+            padding: 0.75rem;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.85); /* Semi-transparent white background */
+            border-bottom-left-radius: 16px; /* Match box border radius */
+            border-bottom-right-radius: 16px;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #222; /* Dark text */
+        }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 768px) {
+            .game-box {
+                width: 90%; /* Make boxes wider on small screens */
+            }
+        }
+
+        /* --- Game Complexity Selector Modal Styles --- */
+        #complexity-selector {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); /* Dimming overlay */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+
+        #complexity-selector.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .complexity-options {
+            /* Now using --color4 for background */
+            background: linear-gradient(135deg, var(--color4) 0%, rgba(var(--color4-rgb), 0.95) 100%);
+            padding: 40px;
+            border-radius: 30px;
+            /* Using --color3 for glow in box-shadow */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2), 0 0 40px rgba(var(--color3-rgb), 0.2);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            transform: scale(0.85);
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            max-width: 400px;
+            /* Using --color3 for subtle border */
+            border: 2px solid rgba(var(--color3-rgb), 0.1);
+        }
+
+        #complexity-selector.visible .complexity-options {
+            transform: scale(1);
+        }
+
+        .complexity-options h3 {
+            margin-top: 0;
+            color: #333; /* Darker text for heading */
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            letter-spacing: 0.05em;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .complexity-button {
+            padding: 16px 35px; /* Adjusted padding */
+            border: none;
+            border-radius: 12px;
+            font-size: 1.3rem; /* Slightly larger font for bigger buttons */
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Default subtle shadow */
+            color: white; /* Text color is now fixed to white for all buttons */
+        }
+
+        /* Specific colors for each complexity button */
+        .complexity-button[data-level="easy"] {
+            background-color: #6CB34B; /* Vibrant Green */
+        }
+        .complexity-button[data-level="easy"]:hover {
+            background-color: #7BC55A; /* Slightly lighter green on hover */
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2), 0 0 25px rgba(108, 179, 75, 0.5); /* Glow matches button color */
+        }
+
+        .complexity-button[data-level="normal"] {
+            background-color: #FF8C00; /* Vibrant Orange */
+        }
+        .complexity-button[data-level="normal"]:hover {
+            background-color: #FF9B20; /* Slightly lighter orange on hover */
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2), 0 0 25px rgba(255, 140, 0, 0.5); /* Glow matches button color */
+        }
+
+        .complexity-button[data-level="tricky"] {
+            background-color: #4682B4; /* Striking Steel Blue */
+        }
+        .complexity-button[data-level="tricky"]:hover {
+            background-color: #5A94CB; /* Slightly lighter blue on hover */
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2), 0 0 25px rgba(70, 130, 180, 0.5); /* Glow matches button color */
+        }
+
+        .complexity-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .complexity-button.cancel-button {
+            background-color: transparent;
+            color: #666; /* Darker gray text */
+            border: 2px solid #AAA; /* Darker gray border */
+            margin-top: 15px;
+            box-shadow: none; /* No shadow by default */
+        }
+        .complexity-button.cancel-button:hover {
+            background-color: rgba(var(--color3-rgb), 0.6); /* Increased opacity for a more visible fill */
+            color: var(--color3); /* Text color becomes modal accent color */
+            border-color: var(--color3); /* Border color becomes modal accent color */
+            transform: translateY(-3px); /* Slightly more lift on hover */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15), 0 0 10px rgba(var(--color3-rgb), 0.4); /* Stronger, accent-colored glow */
+        }
+    </style>
+</head>
+<body>
+    <div class="game-area" id="game-area">
+        <img src="" id="border" alt="Decorative Border" />
+
+        <div class="game-settings">Select Your Game</div>
+        <div class="games-grid">
+            <div class="game-box" style="background-image: url('assets/images/robot-game-bg.svg');" onclick="redirectToGamePage(1)">
+                <div class="game-label">Build My Robot - Find My Robot</div>
+            </div>
+            <div class="game-box" style="background-image: url('assets/images/mountain_climber-game-bg.jpg');" onclick="redirectToGamePage(2)">
+                <div class="game-label">Mountain Climber</div>
+            </div>
+            <div class="game-box" style="background-image: url('assets/images/game3.png');" onclick="redirectToGamePage(3)">
+                <div class="game-label">Game 3</div>
+            </div>
+            <div class="game-box" style="background-image: url('assets/images/game4.png');" onclick="redirectToGamePage(4)">
+                <div class="game-label">Game 4</div>
+            </div>
+            <div class="game-box" style="background-image: url('assets/images/game5.png');" onclick="redirectToGamePage(5)">
+                <div class="game-label">Game 5</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="complexity-selector">
+        <div class="complexity-options">
+            <h3>Select Game Complexity</h3>
+            <button class="complexity-button" data-level="easy">Easy</button>
+            <button class="complexity-button" data-level="normal">Normal</button>
+            <button class="complexity-button" data-level="tricky">Tricky</button>
+            <button class="complexity-button cancel-button">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        // Global variable to store the game ID selected
+        let currentSelectedGameID = null;
+
+        /**
+         * Redirects the user to a specific game page with a chosen complexity level.
+         * @param {number} gameID - The ID of the game to navigate to.
+         * @param {string} level - The chosen complexity level ('easy', 'normal', 'tricky').
+         */
+        function redirectToGamePage(gameID) {
+            // DEBUG: Check gameID right before redirection
+            console.log('redirectToGamePage called. Game ID:', gameID);
+            if (gameID === null) {
+                console.error('ERROR: gameID is null in redirectToGamePage. This should not happen.');
+                alert('There was an issue selecting the game. Please try again.');
+                return;
+            }
+            
+            let targetURL = "";
+            localStorage.setItem('currentGameIndex', gameID);
+            switch (gameID) {
+                case 1:
+                    targetURL = `game_find_my_robot_hardness_selection.html`;
+                    break;
+                case 2:
+                    targetURL = `game_mountain_climber_hardness_selection.html`;
+                    break;
+                case 3:
+                    targetURL = `game_game3_hardness_selection.html`;
+                    break;
+                case 4:
+                    targetURL = `game_game4_hardness_selection.html`;
+                    break;
+                case 5:
+                    targetURL = `game_game5_hardness_selection.html`;
+                    break;
+                default:
+                    console.warn("Attempted to go to an unknown game ID:", gameID);
+                    return; // Exit if gameID is unknown
+            }
+            window.location.href = targetURL;
+        }
+
+        /**
+         * Shows the complexity selector modal.
+         * @param {number} gameID - The ID of the game that was clicked.
+         */
+        function showComplexitySelector(gameID) {
+            // DEBUG: Log when showComplexitySelector is called and the ID passed
+            console.log('showComplexitySelector called with ID:', gameID);
+            currentSelectedGameID = gameID; // This is where it's assigned
+            console.log('currentSelectedGameID set to:', currentSelectedGameID);
+
+            const complexitySelector = document.getElementById('complexity-selector');
+            if (complexitySelector) {
+                complexitySelector.classList.add('visible');
+            }
+        }
+
+        /**
+         * Hides the complexity selector modal.
+         */
+        function hideComplexitySelector() {
+            // DEBUG: Log when hideComplexitySelector is called and the ID is being reset
+            console.log('hideComplexitySelector called. Resetting currentSelectedGameID to null.');
+            const complexitySelector = document.getElementById('complexity-selector');
+            if (complexitySelector) {
+                complexitySelector.classList.remove('visible');
+                currentSelectedGameID = null; // This resets it to null
+            }
+        }
+
+
+
+        // --- Event Listeners for Complexity Buttons ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const complexityButtons = document.querySelectorAll('.complexity-button');
+            complexityButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // DEBUG: Log when any complexity button is clicked
+                    console.log('Complexity button clicked. Button data-level:', button.dataset.level || 'N/A', 'Is Cancel:', button.classList.contains('cancel-button'));
+                    console.log('Value of currentSelectedGameID at button click:', currentSelectedGameID);
+
+                    if (button.classList.contains('cancel-button')) {
+                        hideComplexitySelector();
+                    } else if (currentSelectedGameID !== null) { // This check is good
+                        const level = button.dataset.level;
+                        if (level) {
+                            // *** IMPORTANT FIX: Call redirectToGamePage FIRST ***
+                            redirectToGamePage(currentSelectedGameID, level); // Use the correct ID here
+                            hideComplexitySelector(); // Then hide the modal and reset the ID
+                        }
+                    } else {
+                        // DEBUG: This block will execute if currentSelectedGameID is null when a difficulty button is clicked
+                        console.warn('Difficulty button clicked but currentSelectedGameID is null. Cannot redirect.');
+                        alert('Please select a game first before choosing a difficulty.');
+                    }
+                });
+            });
+        });
+
+        // --- Theme Application Logic ---
+        const theme = localStorage.getItem('selectedTheme');
+        const borderImage = document.getElementById('border');
+        const gameArea = document.getElementById('game-area');
+
+        // These are your original theme colors for color1 and color2 (NOT changed)
+        const themeColors = {
+            dino: {
+                color1: '#99B194', // Muted green
+                color2: '#D9E1A4'  // Muted yellow-green
+            },
+            fairy: {
+                color1: '#7366C6', // Muted purple
+                color2: '#C885D0'  // Muted pink-purple
+            },
+            pet: {
+                color1: '#E78780', // Muted coral
+                color2: '#ECCC96'  // Muted peach
+            },
+            train: {
+                color1: '#8AA9DA', // Muted blue
+                color2: '#B0D0E4'  // Muted light blue
+            }
+        };
+
+        // Helper function to convert hex to RGB for rgba() usage
+        function hexToRgb(hex) {
+            const bigint = parseInt(hex.slice(1), 16);
+            const r = (bigint >> 16) & 255;
+            const g = (bigint >> 8) & 255;
+            const b = bigint & 255;
+            return `${r}, ${g}, ${b}`;
+        }
+
+        // Helper function to lighten a hex color
+        function lightenColor(hex, percent) {
+            let f = parseInt(hex.slice(1), 16),
+                t = percent < 0 ? 0 : 255, // Target component value (0 for darken, 255 for lighten)
+                p = percent < 0 ? percent * -1 : percent, // Absolute percentage
+                R = f >> 16,
+                G = (f >> 8) & 0x00ff,
+                B = f & 0x0000ff;
+            return "#" + (0x1000000 + (Math.round((t - R) * p) + R) * 0x10000 + (Math.round((t - G) * p) + G) * 0x100 + (Math.round((t - B) * p) + B)).toString(16).slice(1);
+        }
+
+        let dynamicColor1 = '#000'; // Default fallback
+        let dynamicColor2 = '#FFF'; // Default fallback
+        let dynamicColor3 = '#000'; // Default fallback for modal primary
+        let dynamicColor4 = '#FFF'; // Default fallback for modal secondary
+
+        if (themeColors[theme]) {
+            dynamicColor1 = themeColors[theme].color1;
+            dynamicColor2 = themeColors[theme].color2;
+
+            // Generate brighter versions for color3 (modal glow/accents) and color4 (modal background)
+            dynamicColor3 = lightenColor(dynamicColor1, 0.5); // Lighten color1 by 50%
+            dynamicColor4 = lightenColor(dynamicColor2, 0.3); // Lighten color2 by 30%
+        }
+
+        // Set CSS variables for main theme
+        document.documentElement.style.setProperty('--color1', dynamicColor1);
+        document.documentElement.style.setProperty('--color2', dynamicColor2);
+        document.documentElement.style.setProperty('--color1-rgb', hexToRgb(dynamicColor1));
+        document.documentElement.style.setProperty('--color2-rgb', hexToRgb(dynamicColor2));
+
+        // Set CSS variables for modal (color3 and color4)
+        document.documentElement.style.setProperty('--color3', dynamicColor3);
+        document.documentElement.style.setProperty('--color4', dynamicColor4);
+        document.documentElement.style.setProperty('--color3-rgb', hexToRgb(dynamicColor3));
+        document.documentElement.style.setProperty('--color4-rgb', hexToRgb(dynamicColor4));
+
+        if (borderImage && theme) {
+            borderImage.src = `assets/images/${theme}.svg`;
+        }
+
+        /**
+         * Adjusts the height and width of the border image to fit the viewport,
+         * and sets the game area container to match the border image's dimensions.
+         */
+        function setFullViewportHeight() {
+            const trueHeight = window.innerHeight + 'px';
+            
+            if (borderImage && gameArea) {
+                borderImage.style.height = trueHeight;
+                borderImage.style.width = 'auto'; // Maintain aspect ratio
+
+                requestAnimationFrame(() => {
+                    const borderComputedWidth = borderImage.offsetWidth;
+                    const borderComputedHeight = borderImage.offsetHeight;
+
+                    gameArea.style.width = borderComputedWidth + 'px';
+                    gameArea.style.height = borderComputedHeight + 'px';
+                });
+            }
+        }
+
+        window.addEventListener('load', () => {
+            setTimeout(setFullViewportHeight, 100); 
+        });
+        window.addEventListener('resize', setFullViewportHeight);
+    </script>
+</body>
+</html>

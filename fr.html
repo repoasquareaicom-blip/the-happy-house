@@ -1,0 +1,1982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find My Robot - Gameplay</title>
+    <style>
+        /* --- General Layout & Body Styles --- */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+            position: relative;
+        }
+
+        /* Variables for theme colors */
+        :root {
+            --color1: #000;
+            --color2: #FFF;
+        }
+
+        /* --- Game Container & Border --- */
+        .game-container {
+            position: relative;
+            height: 100vh;
+            width: auto;
+            max-width: 100vw;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .border-image-element {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        /* --- Game Play Area --- */
+        .game-play-area {
+            position: relative;
+            width: calc(100% - 8%);
+            height: calc(100% - 8%);
+            background-color: var(--color1);
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 5;
+            box-sizing: border-box;
+            background: #ffffff; /* This will be overridden by random SVG background or scene change */
+            border: none;
+            border-radius: 10px;
+            touch-action: manipulation;
+        }
+
+        /* --- Robot Styles --- */
+        .robot {
+            position: absolute;
+            
+            cursor: pointer;
+            user-select: none;
+            transition: transform 3.3s ease-in-out;
+            filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.2));
+            top: 0;
+            left: 0;
+            transform: translate(0, 0); /* Reset initial transform */
+            
+        }
+        .robot img {
+            user-select: none;
+            pointer-events: none;
+            display: block;
+        }
+        .robot img.base {
+            position: relative;
+            z-index: 0;
+            height: calc(40vh);
+        }
+        .robot img.otherparts {
+            position: absolute;
+            width: auto;
+            height: calc(40vh);
+        }
+
+        .lefthand-1 {
+            z-index: -1;
+            /* top: 113px; left: 121px; -- these come from JSON */
+            transform-origin: 61.8% 41.8%; /* Pivots from top-right of the hand element */
+            animation: leftHandWave 3s ease-in-out infinite; /* 3s duration, smooth ease-in-out, infinite loop */
+            /* You may need to fine-tune this based on your image.
+            Common origins:
+            - Top-right (100% 0%) for left hand if swinging from shoulder.
+            - Top-left (0% 0%) for right hand if swinging from shoulder.
+            - Center bottom (50% 100%) if arm swings from elbow.
+            */
+        }
+        .righthand-1 {
+            /* top: 113px; left: 44px; -- these come from JSON transform-origin: 367.569px 658.315px;*/
+            transform-origin: 35.5% 41.8%; /* Pivots from top-left of the hand element */
+            animation: rightHandWave 3s ease-in-out infinite; /* 3s duration, smooth ease-in-out, infinite loop */
+        }
+        /* --- NEW CSS FOR HAND ANIMATIONS --- */
+
+        .lefthand-2 {
+            z-index: -1;
+            /* top: 113px; left: 121px; -- these come from JSON */
+            transform-origin: 61.8% 41.8%; /* Pivots from top-right of the hand element */
+            animation: leftHandWave 3s ease-in-out infinite; /* 3s duration, smooth ease-in-out, infinite loop */
+            /* You may need to fine-tune this based on your image.
+            Common origins:
+            - Top-right (100% 0%) for left hand if swinging from shoulder.
+            - Top-left (0% 0%) for right hand if swinging from shoulder.
+            - Center bottom (50% 100%) if arm swings from elbow.
+            */
+        }
+        .righthand-2 {
+            /* top: 113px; left: 44px; -- these come from JSON transform-origin: 367.569px 658.315px;*/
+            transform-origin: 35.5% 41.8%; /* Pivots from top-left of the hand element */
+            animation: rightHandWave 3s ease-in-out infinite; /* 3s duration, smooth ease-in-out, infinite loop */
+        }
+
+        .lefthand-3 {
+            z-index: -1;
+            /* top: 113px; left: 121px; -- these come from JSON */
+            transform-origin: 61.8% 41.8%; /* Pivots from top-right of the hand element */
+            animation: leftHandWave 3s ease-in-out infinite; /* 3s duration, smooth ease-in-out, infinite loop */
+            /* You may need to fine-tune this based on your image.
+            Common origins:
+            - Top-right (100% 0%) for left hand if swinging from shoulder.
+            - Top-left (0% 0%) for right hand if swinging from shoulder.
+            - Center bottom (50% 100%) if arm swings from elbow.
+            */
+        }
+        .righthand-3 {
+            /* top: 113px; left: 44px; -- these come from JSON transform-origin: 367.569px 658.315px;*/
+            transform-origin: 35.5% 41.8%; /* Pivots from top-left of the hand element */
+            animation: rightHandWave 3s ease-in-out infinite; /* 3s duration, smooth ease-in-out, infinite loop */
+        }
+        /* --- NEW CSS FOR HAND ANIMATIONS --- */
+
+        .lefthand-4 {
+            z-index: -1;
+            /* top: 113px; left: 121px; -- these come from JSON */
+            transform-origin: 61.8% 41.8%; /* Pivots from top-right of the hand element */
+            animation: leftHandWave 3s ease-in-out infinite; /* 3s duration, smooth ease-in-out, infinite loop */
+            /* You may need to fine-tune this based on your image.
+            Common origins:
+            - Top-right (100% 0%) for left hand if swinging from shoulder.
+            - Top-left (0% 0%) for right hand if swinging from shoulder.
+            - Center bottom (50% 100%) if arm swings from elbow.
+            */
+        }
+        .righthand-4 {
+            /* top: 113px; left: 44px; -- these come from JSON transform-origin: 367.569px 658.315px;*/
+            transform-origin: 35.5% 41.8%; /* Pivots from top-left of the hand element */
+            animation: rightHandWave 3s ease-in-out infinite; /* 3s duration, smooth ease-in-out, infinite loop */
+        }
+        
+        .lefthand-5 {
+            z-index: -1;
+            /* top: 113px; left: 121px; -- these come from JSON */
+            transform-origin: 61.8% 41.8%; /* Pivots from top-right of the hand element */
+            animation: leftHandWave 3s ease-in-out infinite; /* 3s duration, smooth ease-in-out, infinite loop */
+            /* You may need to fine-tune this based on your image.
+            Common origins:
+            - Top-right (100% 0%) for left hand if swinging from shoulder.
+            - Top-left (0% 0%) for right hand if swinging from shoulder.
+            - Center bottom (50% 100%) if arm swings from elbow.
+            */
+        }
+        .righthand-5 {
+            z-index: 1;
+            /* top: 113px; left: 44px; -- these come from JSON transform-origin: 367.569px 658.315px;*/
+            transform-origin: 35.5% 41.8%; /* Pivots from top-left of the hand element */
+            animation: rightHandWave 3s ease-in-out infinite; /* 3s duration, smooth ease-in-out, infinite loop */
+        }
+        
+        .lefthand-6 {
+            z-index: -1;
+            /* top: 113px; left: 121px; -- these come from JSON */
+            transform-origin: 61.8% 41.8%; /* Pivots from top-right of the hand element */
+            animation: leftHandWave 3s ease-in-out infinite; /* 3s duration, smooth ease-in-out, infinite loop */
+            /* You may need to fine-tune this based on your image.
+            Common origins:
+            - Top-right (100% 0%) for left hand if swinging from shoulder.
+            - Top-left (0% 0%) for right hand if swinging from shoulder.
+            - Center bottom (50% 100%) if arm swings from elbow.
+            */
+        }
+        .righthand-6 {
+            /* top: 113px; left: 44px; -- these come from JSON transform-origin: 367.569px 658.315px;*/
+            transform-origin: 35.5% 41.8%; /* Pivots from top-left of the hand element */
+            animation: rightHandWave 3s ease-in-out infinite; /* 3s duration, smooth ease-in-out, infinite loop */
+        }
+        /* --- NEW CSS FOR HAND ANIMATIONS --- */
+
+        .lefthand-7 {
+            z-index: -1;
+            /* top: 113px; left: 121px; -- these come from JSON */
+            transform-origin: 61.8% 39.8%; /* Pivots from top-right of the hand element */
+            animation: leftHandWave 3s ease-in-out infinite; /* 3s duration, smooth ease-in-out, infinite loop */
+            /* You may need to fine-tune this based on your image.
+            Common origins:
+            - Top-right (100% 0%) for left hand if swinging from shoulder.
+            - Top-left (0% 0%) for right hand if swinging from shoulder.
+            - Center bottom (50% 100%) if arm swings from elbow.
+            */
+        }
+        .righthand-7 {
+            z-index: 1;
+            /* top: 113px; left: 44px; -- these come from JSON transform-origin: 367.569px 658.315px;*/
+            transform-origin: 35% 39.8%; /* Pivots from top-left of the hand element */
+            animation: rightHandWave 3s ease-in-out infinite; /* 3s duration, smooth ease-in-out, infinite loop */
+        }
+
+        .lefthand-9 {
+            z-index: -1;
+            /* top: 113px; left: 121px; -- these come from JSON */
+            transform-origin: 60.8% 40.8%; /* Pivots from top-right of the hand element */
+            animation: leftHandWave 3s ease-in-out infinite; /* 3s duration, smooth ease-in-out, infinite loop */
+            /* You may need to fine-tune this based on your image.
+            Common origins:
+            - Top-right (100% 0%) for left hand if swinging from shoulder.
+            - Top-left (0% 0%) for right hand if swinging from shoulder.
+            - Center bottom (50% 100%) if arm swings from elbow.
+            */
+        }
+        .righthand-9 {
+            z-index: 1;
+            /* top: 113px; left: 44px; -- these come from JSON transform-origin: 367.569px 658.315px;*/
+            transform-origin: 32% 40.8%;  /* Pivots from top-left of the hand element */
+            animation: rightHandWave 3s ease-in-out infinite; /* 3s duration, smooth ease-in-out, infinite loop */
+        }
+        /* --- NEW CSS FOR HAND ANIMATIONS --- */
+
+        .lefthand-10 {
+            z-index: -1;
+            /* top: 113px; left: 121px; -- these come from JSON */
+            transform-origin: 60.8% 40.8%; /* Pivots from top-right of the hand element */
+            animation: leftHandWave 3s ease-in-out infinite; /* 3s duration, smooth ease-in-out, infinite loop */
+            /* You may need to fine-tune this based on your image.
+            Common origins:
+            - Top-right (100% 0%) for left hand if swinging from shoulder.
+            - Top-left (0% 0%) for right hand if swinging from shoulder.
+            - Center bottom (50% 100%) if arm swings from elbow.
+            */
+        }
+        .righthand-10 {
+            /* top: 113px; left: 44px; -- these come from JSON transform-origin: 367.569px 658.315px;*/
+            transform-origin: 32% 40.8%; /* Pivots from top-left of the hand element */
+            animation: rightHandWave 3s ease-in-out infinite; /* 3s duration, smooth ease-in-out, infinite loop */
+        }
+
+        .leftleg-2 {
+        z-index: -1;
+        transform: rotate(-10deg); 
+        transform-origin: 50% 50%;
+        animation: legWave1 3s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+        }
+
+        .rightleg-2 {
+        transform: rotate(10deg); 
+        transform-origin: 50% 50%;
+        animation: legWave 3s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+        }
+
+        .leftleg-4 {
+        z-index: -1;
+        transform: rotate(-10deg); 
+        transform-origin: 50% 50%;
+        animation: legWave1 3s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+        }
+
+        .rightleg-4 {
+        transform: rotate(10deg); 
+        transform-origin: 50% 50%;
+        animation: legWave 3s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+        }
+
+        .leftleg-6 {
+        z-index: -1;
+        transform: rotate(-10deg); 
+        transform-origin: 50% 50%;
+        animation: legWave1 3s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+        }
+
+        .rightleg-6 {
+        transform: rotate(10deg); 
+        transform-origin: 50% 50%;
+        animation: legWave 3s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+        }
+
+        .leftleg-10 {
+        z-index: -1;
+        transform: rotate(-10deg); 
+        transform-origin: 50% 50%;
+        animation: legWave1 3s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+        }
+
+        .rightleg-10 {
+        transform: rotate(10deg); 
+        transform-origin: 50% 50%;
+        animation: legWave 3s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+        }
+
+        
+        /* Keyframes for Left Hand Waving */
+        @keyframes leftHandWave {
+        0%   { transform: rotate(0deg); }
+        25%  { transform: rotate(50deg); }
+        50%  { transform: rotate(0deg); }
+        75%  { transform: rotate(50deg); }
+        100% { transform: rotate(0deg); }
+        }
+
+
+       /* Keyframes for Right Hand Waving */
+        @keyframes rightHandWave {
+        0%   { transform: rotate(0deg); }
+        25%  { transform: rotate(-50deg); }
+        50%  { transform: rotate(0deg); }
+        75%  { transform: rotate(-50deg); }
+        100% { transform: rotate(0deg); }
+        }
+
+       /* Keyframes for Leg Waving */
+        @keyframes legWave {
+        0%   { transform: rotate(10deg); }
+        25%  { transform: rotate(-30deg); }
+        50%  { transform: rotate(10deg); }
+        75%  { transform: rotate(-30deg); }
+        100% { transform: rotate(10deg); }
+        }
+        @keyframes legWave1 {
+        0%   { transform: rotate(-10deg); }
+        25%  { transform: rotate(30deg); }
+        50%  { transform: rotate(-10deg); }
+        75%  { transform: rotate(30deg); }
+        100% { transform: rotate(-10deg); }
+        }
+
+      
+        .robot img.accessory {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: auto;
+            z-index: 1;
+        }
+        .leftwheel-1
+        {
+            z-index: -1;
+        }
+        .MovingRightAnimation
+        {
+             animation: wheelSpinForward 2s linear infinite; 
+        }
+        .MovingLeftAnimation
+        {
+             animation: wheelSpinBackward 2s linear infinite; 
+        }
+        /* --- NEW CSS FOR WHEEL ROTATION --- */
+
+        /* Define the rotation animation */
+        @keyframes wheelSpinForward {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg); /* Rotate a full circle clockwise */
+            }
+        }
+        @keyframes wheelSpinBackward {
+            from {
+                transform: rotate(360deg);
+            }
+            to {
+                transform: rotate(0deg); /* Rotate a full circle clockwise */
+            }
+        }
+
+        /* Apply the animation to the wheel elements */
+        .leftwheel-1 {
+            transform-origin: 60.8% 77.5%;
+            
+            /* Add transform-origin: 50% 50%; to the wheel specific styles if not already there */
+        }
+        .rightwheel-1 {
+            transform-origin: 37.8% 77.5%;
+            
+            /* Add transform-origin: 50% 50%; to the wheel specific styles if not already there */
+        }
+        .leftwheel-3 {
+            transform-origin: 57.8% 75.8%;
+            
+            /* Add transform-origin: 50% 50%; to the wheel specific styles if not already there */
+        }
+        .rightwheel-3 {
+            transform-origin: 35.5% 75.8%;
+            
+            /* Add transform-origin: 50% 50%; to the wheel specific styles if not already there */
+        }
+        .leftwheel-5 {
+            transform-origin: 56.5% 74.55%;
+            
+            /* Add transform-origin: 50% 50%; to the wheel specific styles if not already there */
+        }
+        .rightwheel-5 {
+            transform-origin: 34% 74.55%;
+            
+            /* Add transform-origin: 50% 50%; to the wheel specific styles if not already there */
+        }
+        .leftwheel-7 {
+            transform-origin: 57.8% 70.6%;
+            
+            /* Add transform-origin: 50% 50%; to the wheel specific styles if not already there */
+        }
+        .rightwheel-7 {
+            transform-origin: 35.8% 70.6%;
+            
+            /* Add transform-origin: 50% 50%; to the wheel specific styles if not already there */
+        }
+        .leftwheel-9 {
+            z-index: -1;
+            transform-origin: 58.85% 74.852%;
+            /* Add transform-origin: 50% 50%; to the wheel specific styles if not already there */
+        }
+        .rightwheel-9 {
+            transform-origin: 36.5% 74.852%;
+            
+            /* Add transform-origin: 50% 50%; to the wheel specific styles if not already there */
+        }
+
+        .robot.highlighted-green {
+            outline: 5px solid green;
+            outline-offset: -5px;
+            animation: glow-green 1s ease-out;
+        }
+        @keyframes glow-green {
+            0% { outline-color: green; }
+            100% { outline-color: transparent; }
+        }
+        .robot.highlighted-red {
+            outline: 5px solid red;
+            outline-offset: -5px;
+            animation: glow-red 1s ease-out;
+        }
+        @keyframes glow-red {
+            0% { outline-color: red; }
+            100% { outline-color: transparent; }
+        }
+
+        /* --- Buttons & Messages --- */
+        .game-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent overlay */
+            z-index: 40; /* Above all game elements */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        }
+        .game-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #wellDoneMessage {
+            color: white;
+            font-size: 4em;
+            font-weight: bold;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
+            margin-bottom: 30px;
+            animation: pop-in 0.3s ease-out;
+        }
+
+        #continueButton, #restartButton {
+            padding: 15px 30px;
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #fff;
+            background-color: #4CAF50; /* Green */
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            transition: background-color 0.3s, transform 0.1s, box-shadow 0.1s;
+        }
+        #continueButton:hover, #restartButton:hover {
+            background-color: #45a049;
+        }
+        #continueButton:active, #restartButton:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* Restart button (for game over) - positioned relative to body */
+        #restartButton {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 25;
+            display: none; /* Hidden by default */
+        }
+
+        /* Well Done Animation */
+        @keyframes pop-in {
+            0% { transform: scale(0.5); opacity: 0; }
+            80% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+
+        /* Wrap the timer + minus box together */
+.timer-wrapper {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 20;
+}
+
+/* Battery container (timer bar) */
+.timer-container {
+  width: 250px;
+  height: 60px;
+  background-color: #e0e0e0;
+  border: 5px solid #666;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.4);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Battery nub */
+.timer-container::before {
+  content: '';
+  position: absolute;
+  right: -15px;
+  width: 10px;
+  height: 30px;
+  background-color: #666;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  z-index: 3;
+}
+
+/* Battery fill */
+.timer-liquid {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, #4CAF50, #8BC34A);
+  transition: width 0.3s linear, background 0.3s ease-in-out;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+/* Timer value text */
+.timer-text {
+  position: relative;
+  z-index: 2;
+  color: #333;
+  font-size: 3.5em;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(255,255,255,0.5);
+}
+
+/* Minus score box */
+.minus-score-box {
+  background-color: #d32f2f;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 3.5em;
+  font-weight: bold;
+  min-width: 80px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 5px solid #666;
+  border-radius: 15px;
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.4);
+  position:relative;
+}
+
+        /* --- Distraction Styles --- */
+        .distraction {
+            position: absolute;
+            user-select: none;
+            pointer-events: none; /* Distractions are not clickable */
+            z-index: 8; /* Below border, above background, potentially mixing with robots */
+            transition: transform linear; /* Set transition dynamically in JS */
+            filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.1));
+            image-rendering: pixelated; /* Helps keep GIFs sharp if they are pixel art */
+        }
+
+        .distraction.bird {
+            width: 10%; /* Example size */
+            height: auto;
+        }
+
+        .distraction.ball {
+            width: 8%; /* Example size */
+            height: auto;
+            border-radius: 50%; /* Make it round if it's a GIF that supports it, though usually not needed for pixel art */
+        }
+
+        /* --- NEW: Time's Up Overlay --- */
+        .full-screen-overlay {
+            position: fixed; /* Use fixed to cover entire viewport */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9); /* Darker overlay for effect */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 50; /* Higher than game-overlay */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s;
+        }
+
+        .full-screen-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Time's Up Message */
+        #timesUpMessage {
+            color: white;
+            font-size: 5em;
+            font-weight: bold;
+            text-shadow: 3px 3px 8px rgba(0,0,0,0.8);
+            transform: scale(0.5); /* Start small */
+            opacity: 0;
+            animation: timesUpPopIn 0.8s ease-out forwards; /* Animation applies when active */
+        }
+
+        @keyframes timesUpPopIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            70% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+.game-start-overlay-content {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 9999;
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.game-start-overlay-content h1 {
+  color: white;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+#startGameBtn {
+  padding: 12px 28px;
+  font-size: 1.2rem;
+  background-color: #00c853;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+#startGameBtn:hover {
+  background-color: #009624;
+}
+
+    </style>
+</head>
+<body>
+<div id="gameStartOverlay" class="game-start-overlay">
+  <div class="game-start-overlay-content">
+    <h1>Find My Robot</h1>
+    <button id="startGameBtn">Start Game</button>
+  </div>
+</div>
+<audio id="audioPlayer" muted></audio>
+    <div class="game-container" id="gameContainer">
+        <img id="borderImageElement" class="border-image-element" alt="Theme Border">
+
+        <div class="game-play-area" id="gamePlayArea">
+            <p id="gameStatus" style="position: absolute; bottom: 10px; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); z-index: 20;">Game loading...</p>
+        </div>
+
+<div class="timer-wrapper">
+  <div class="timer-container">
+    <div id="timerLiquid" class="timer-liquid"></div>
+    <span id="timerText" class="timer-text">30</span>
+  </div>
+  <div id="minusScoreBox" class="minus-score-box"></div>
+</div>
+
+
+
+
+        <div class="game-overlay" id="gameOverlay">
+            <p id="wellDoneMessage" style="display:none;"></p>
+            <button id="continueButton" style="display:none;">OK to Continue Play</button>
+        </div>
+    </div>
+
+    <button id="restartButton">Play Again!</button>
+
+    <div class="full-screen-overlay" id="timesUpOverlay">
+        <p id="timesUpMessage">Time's Up!</p>
+    </div>
+
+    <script>
+        // --- Game Configuration & Data ---
+        const config = {
+            speedSeconds: 5.5, // Robot movement speed base
+            builtRobotCount: 1, // Always 1 target robot
+            offScreenVisibility: .5, // Percentage of robot visible when "off-screen"
+            gameDurationSeconds: 560, // Default total game time in seconds
+
+            // Difficulty settings (currentDifficulty will be set directly)
+            difficultyLevels: {
+                relaxed: {
+                    randomRobotCount: 10,
+                    distractions: [], // <--- EMPTY ARRAY for 'easy'
+                    gameDurationSeconds: 30
+                },
+                normal: {
+                    randomRobotCount: 12,
+                    distractions: [{ type: 'ball', interval: 2000 }], // <--- BIRD for 'normal'
+                    gameDurationSeconds: 30
+                },
+                tricky: {
+                    randomRobotCount: 15,
+                    distractions: [
+                        { type: 'ball', interval: 1500 }, // <--- BIRD for 'tricky'
+                        { type: 'ball', interval: 2000 }  // <--- BALL for 'tricky'
+                    ],
+                    gameDurationSeconds: 30
+                }
+            },
+            // Set your desired difficulty here: 'easy', 'normal', or 'tricky'
+            
+            currentDifficulty: localStorage.getItem('gameTrickLevel') // Directly set to 'normal' as requested
+        };
+        config.currentDifficulty = localStorage.getItem('gameTrickLevel'); // Directly set to 'normal' as requested
+        var student_built_robot = localStorage.getItem('student_built_robot');
+        var selected_accessories = localStorage.getItem('selected_accessories');
+        var builtRobotId;
+        if (selected_accessories && selected_accessories.includes('wheel')) {
+            builtRobotId = student_built_robot * 2 - 1;
+        } else if (student_built_robot == 4)
+        {
+            builtRobotId = student_built_robot * 2 - 1;
+        }
+        else {
+            builtRobotId = student_built_robot * 2;
+        }
+        
+        const BaseRobotsetting = [
+        { id: 1, baseid: "1"},
+        { id: 2, baseid: "1"},
+        { id: 3, baseid: "2"},
+        { id: 4, baseid: "2"},
+        { id: 5, baseid: "3"},
+        { id: 6, baseid: "3"},
+        { id: 7, baseid: "4"},
+        { id: 9, baseid: "5"},
+        { id: 10, baseid: "5"}
+        ];
+        const accessoriesList = ['1-hat', '1-headphones', '1-sunglasses'];
+        const accessoriesListBuilt = ['1-hat', '1-headphones', '1-sunglasses'];
+        //const builtRobotId = 6;
+        const Robotsetting = [{
+            id: 1,
+            //base: 'assets/images/robots/1/build-items/1-wheel-chair.svg',
+            base: 'assets/images/robots/1/build-items/wheel Robot SVG/body.svg',
+            lefthand: 'assets/images/robots/1/build-items/wheel Robot SVG/LH.svg',
+            lefthandcss: 'top:0px; left:0px;',
+            righthand: 'assets/images/robots/1/build-items/wheel Robot SVG/RH.svg',
+            righthandcss: 'top:0px; left:0px;',
+            leftwheel: 'assets/images/robots/1/build-items/wheel Robot SVG/LW.svg',
+            rightwheel: 'assets/images/robots/1/build-items/wheel Robot SVG/RW.svg',
+            rightwheelcss: 'top: 0px; left: 0px;', 
+            leftwheelcss: 'top: 0px; left: 0px;z-index:-1', 
+            accessories: ['1-hat', '1-headphones', '1-sunglasses']}, {
+            id: 2,
+            //base: 'assets/images/robots/1/build-items/1-wheel-chair.svg',
+            leftleg: 'assets/images/robots/1/build-items/Leg Robot SVG/LL.svg',
+            rightleg: 'assets/images/robots/1/build-items/Leg Robot SVG/RL.svg',
+            rightlegcss: 'top: 0px; left: 0px;', 
+            leftlegcss: 'top: 0px; left: 0px;', 
+            base: 'assets/images/robots/1/build-items/Leg Robot SVG/body.svg',
+            lefthand: 'assets/images/robots/1/build-items/Leg Robot SVG/LH.svg',
+            lefthandcss: 'top:0px; left:0px;',
+            righthand: 'assets/images/robots/1/build-items/Leg Robot SVG/RH.svg',
+            righthandcss: 'top:0px; left:0px;',
+            accessories: ['1-hat', '1-headphones', '1-sunglasses']}, {
+            id: 3,
+            //base: 'assets/images/robots/2/build-items/2-wheel-chair.svg',
+            leftwheel: 'assets/images/robots/2/build-items/2-leftwheel.svg',
+            base: 'assets/images/robots/2/build-items/2-body.svg',
+            lefthand: 'assets/images/robots/2/build-items/2-lefthand.svg',
+            lefthandcss: 'top:0px; left:0px;',
+            righthand: 'assets/images/robots/2/build-items/2-righthand.svg',
+            righthandcss: 'top:0px; left:0px;',
+            rightwheel: 'assets/images/robots/2/build-items/2-rightwheel.svg',
+            rightwheelcss: 'top: 0px; left: 0px;', 
+            leftwheelcss: 'top: 0px; left: 0px;z-index:-1', 
+            accessories: ['1-hat', '1-headphones', '1-sunglasses']},{
+            id: 4,
+            //base: 'assets/images/robots/2/build-items/2-wheel-chair.svg',
+            leftleg: 'assets/images/robots/2/build-items/2-leftleg.svg',
+            rightleg: 'assets/images/robots/2/build-items/2-rightleg.svg',
+            base: 'assets/images/robots/2/build-items/2-body1.svg',
+            lefthand: 'assets/images/robots/2/build-items/2-lefthand.svg',
+            lefthandcss: 'top:0px; left:0px;',
+            righthand: 'assets/images/robots/2/build-items/2-righthand.svg',
+            righthandcss: 'top:0px; left:0px;',
+            rightlegcss: 'top: 0px; left: 0px;', 
+            leftwheelcss: 'top: 0px; left: 0px;z-index:-1', 
+            accessories: ['1-hat', '1-headphones', '1-sunglasses']},{
+            id: 5,
+            //base: 'assets/images/robots/3/build-items/3-wheel-chair.svg',
+            base: 'assets/images/robots/3/build-items/3-body.svg',
+            lefthand: 'assets/images/robots/3/build-items/3-lefthand.svg',
+            lefthandcss: 'top:0px; left:0px;',
+            righthand: 'assets/images/robots/3/build-items/3-righthand.svg',
+            righthandcss: 'top:0px; left:0px;',
+            leftwheel: 'assets/images/robots/3/build-items/3-leftwheel.svg',
+            rightwheel: 'assets/images/robots/3/build-items/3-rightwheel.svg',
+            rightwheelcss: 'top: 0px; left: 0px;', 
+            leftwheelcss: 'top: 0px; left: 0px;z-index:-1', 
+            accessories: ['1-hat', '1-headphones', '1-sunglasses']},{
+            id: 6,
+            //base: 'assets/images/robots/3/build-items/3-wheel-chair.svg',
+            leftleg: 'assets/images/robots/3/build-items/3-leftleg.svg',
+            rightleg: 'assets/images/robots/3/build-items/3-rightleg.svg',
+            base: 'assets/images/robots/3/build-items/3-body1.svg',
+            lefthand: 'assets/images/robots/3/build-items/3-lefthand.svg',
+            lefthandcss: 'top:0px; left:0px;',
+            righthand: 'assets/images/robots/3/build-items/3-righthand.svg',
+            righthandcss: 'top:0px; left:0px;',
+            rightlegcss: 'top: 0px; left: 0px;', 
+            leftwheelcss: 'top: 0px; left: 0px;z-index:-1', 
+            accessories: ['1-hat', '1-headphones', '1-sunglasses']},{
+            id: 7,
+            //base: 'assets/images/robots/4/build-items/4-wheel-chair.svg',
+            base: 'assets/images/robots/4/build-items/4-body.svg',
+            lefthand: 'assets/images/robots/4/build-items/4-lefthand.svg',
+            lefthandcss: 'top:0px; left:0px;',
+            righthand: 'assets/images/robots/4/build-items/4-righthand.svg',
+            righthandcss: 'top:0px; left:0px;',
+            leftwheel: 'assets/images/robots/4/build-items/4-leftwheel.svg',
+            rightwheel: 'assets/images/robots/4/build-items/4-rightwheel.svg',
+            rightwheelcss: 'top: 0px; left: 0px;', 
+            leftwheelcss: 'top: 0px; left: 0px;z-index:-1', 
+            accessories: ['1-hat', '1-headphones', '1-sunglasses']},{
+            id: 9,
+            //base: 'assets/images/robots/5/build-items/5-wheel-chair.svg',
+            base: 'assets/images/robots/5/build-items/5-body.svg',
+            lefthand: 'assets/images/robots/5/build-items/5-lefthand.svg',
+            lefthandcss: 'top:0px; left:0px;',
+            righthand: 'assets/images/robots/5/build-items/5-righthand.svg',
+            righthandcss: 'top:0px; left:0px;',
+            leftwheel: 'assets/images/robots/5/build-items/5-leftwheel.svg',
+            rightwheel: 'assets/images/robots/5/build-items/5-rightwheel.svg',
+            rightwheelcss: 'top: 0px; left: 0px;', 
+            leftwheelcss: 'top: 0px; left: 0px;z-index:-1', 
+            accessories: ['1-hat', '1-headphones', '1-sunglasses']},{
+            id: 10,
+            //base: 'assets/images/robots/5/build-items/5-wheel-chair.svg',
+            leftleg: 'assets/images/robots/5/build-items/5-leftleg.svg',
+            rightleg: 'assets/images/robots/5/build-items/5-rightleg.svg',
+            base: 'assets/images/robots/5/build-items/5-body1.svg',
+            lefthand: 'assets/images/robots/5/build-items/5-lefthand.svg',
+            lefthandcss: 'top:0px; left:0px;',
+            righthand: 'assets/images/robots/5/build-items/5-righthand.svg',
+            righthandcss: 'top:0px; left:0px;',
+            rightlegcss: 'top: 0px; left: 0px;', 
+            leftwheelcss: 'top: 0px; left: 0px;z-index:-1', 
+            accessories: ['1-hat', '1-headphones', '1-sunglasses']}]
+
+        const builtRobot = {
+            id: 9,
+            //base: 'assets/images/robots/5/build-items/5-wheel-chair.svg',
+            leftleg: 'assets/images/robots/5/build-items/5-leftleg.svg',
+            rightleg: 'assets/images/robots/5/build-items/5-rightleg.svg',
+            base: 'assets/images/robots/5/build-items/5-body1.svg',
+            lefthand: 'assets/images/robots/5/build-items/5-lefthand.svg',
+            lefthandcss: 'top:0px; left:0px;',
+            righthand: 'assets/images/robots/5/build-items/5-righthand.svg',
+            righthandcss: 'top:0px; left:0px;',
+            rightlegcss: 'top: 0px; left: 0px;', 
+            leftwheelcss: 'top: 0px; left: 0px;z-index:-1', 
+            accessories: ['1-hat', '1-headphones', '1-sunglasses']
+        };
+        
+        const themeColors = {
+            dino: { color1: '#99B194', color2: '#D9E1A4' },
+            fairy: { color1: '#7366C6', color2: '#C885D0' },
+            pet: { color1: '#E78780', color2: '#ECCC96' },
+            train: { color1: '#8AA9DA', color2: '#B0D0E4' }
+        };
+
+        const playAreaBackgrounds = [
+            'robot_game_backgrounds_beach.svg',
+            'robot_game_backgrounds_castle.svg',
+            'robot_game_backgrounds_cave.svg',
+            'robot_game_backgrounds_circus.svg',
+            'robot_game_backgrounds_market.svg',
+            'robot_game_backgrounds_school.svg',
+            'robot_game_backgrounds_shops.svg',
+            'robot_game_backgrounds_space.svg',
+            'robot_game_backgrounds_trains.svg',
+            'robot_game_backgrounds_zoo.svg'
+        ];
+
+        const mascotPhrases = [
+            "Beep boop! Good job!",
+            "Circuits are tingling!",
+            "You got me!",
+            "Fantastic tap!",
+            "Processing... success!"
+        ];
+
+        // --- DOM Elements (accessed once) ---
+        const gameContainer = document.getElementById('gameContainer');
+        const borderImage = document.getElementById('borderImageElement');
+        const gamePlayArea = document.getElementById('gamePlayArea');
+        let gameStatusText = document.getElementById('gameStatus');
+        const timerLiquid = document.getElementById('timerLiquid');
+        const timerText = document.getElementById('timerText');
+        const restartButton = document.getElementById('restartButton');
+
+        // Game Overlay Elements
+        const gameOverlay = document.getElementById('gameOverlay');
+        const wellDoneMessage = document.getElementById('wellDoneMessage');
+        const continueButton = document.getElementById('continueButton');
+
+        // Time's Up Overlay Elements (These remain in index.html)
+        const timesUpOverlay = document.getElementById('timesUpOverlay');
+        const timesUpMessage = document.getElementById('timesUpMessage');
+
+        // --- Game State Variables ---
+        let gameActive = false;
+        let robotsReadyToAnimate = []; // new array to store created robots
+        let minusSeconds = 0;
+        let robotsData = [];
+        let transitionListeners = new Map();
+        let gameTimer;
+        let timerInterval;
+        let distractionIntervals = [];
+        let activeDistractions = [];
+        let currentScore = 0; // To track score for the current game
+        let gameStarted=0;
+
+        // --- Utility Functions ---
+
+        function generateRandomBot() {
+            const gifs = [
+                'assets/images/robots/3/build-items/3-default.svg',
+                'assets/images/robots/4/build-items/4-default.svg',
+                'assets/images/robots/5/build-items/5-default.svg'
+            ];
+            const base = Robotsetting[Math.floor(Math.random() * Robotsetting.length)];
+            const accessories = accessoriesList
+                .sort(() => 0.5 - Math.random()) // Shuffle accessories
+                .slice(0, Math.floor(Math.random() * 3)); // Pick 0 to 2 accessories
+            return { base, accessories: accessories.sort() }; // Sort accessories for consistent comparison
+        }
+
+        function loadImage(src) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.crossOrigin = "anonymous"; // Needed for canvas security
+                img.onload = () => resolve(img);
+                img.onerror = (e) => {
+                    console.error(`Failed to load image: ${src}`, e);
+                    reject(e);
+                };
+                img.src = src;
+            });
+        }
+
+        async function createRobotElement(data, builtReference, builtrobotflag) {
+    const robot = document.createElement('div');
+    robot.classList.add('robot');
+    robot.dataset.robotid = "built" + data.id;
+    robot.dataset.robotbaseid = data.id;
+    robot.style.position = 'absolute'; // Required for transform to apply correctly
+    robot.style.top = '0px';
+    robot.style.left = '0px';
+
+    try {
+        // Load base parts
+        for (const key in data) {
+            if (key === 'id' || key === 'accessories' || key.endsWith('css')) continue;
+
+            const imagePath = data[key];
+            if (typeof imagePath === 'string' && imagePath) {
+                try {
+                    const imgElement = await loadImage(imagePath);
+                    imgElement.classList.add('robot-part');
+                    if (key === 'base') {
+                        imgElement.classList.add('base');
+                        imgElement.style.zIndex = 2;
+                    } else {
+                        imgElement.classList.add('otherparts', key, `${key}-${data.id}`);
+                        imgElement.style.zIndex = key.includes("righthand") || key.includes("rightwheel") ? 2 : 1;
+                    }
+
+                    const cssKey = key + 'css';
+                    if (data[cssKey] && typeof data[cssKey] === 'string') {
+                        imgElement.style.cssText += data[cssKey];
+                    }
+
+                    robot.appendChild(imgElement);
+                } catch (error) {
+                    console.error(`Error loading image for ${key}:`, error.message);
+                }
+            }
+        }
+
+        // Load accessories if it's the built robot
+        if (builtrobotflag === "built") {
+            const accessoryImgs = [];
+            const selectedAccessoriesArray = selected_accessories.split(',').map(item => item.trim());
+            const foundBaseRobot = BaseRobotsetting.find(robot => robot.id === builtRobotId);
+            const baseId = foundBaseRobot.baseid;
+            const robotPartsData = await (await fetch('assets/data/robot-parts.json')).json();
+
+            for (const acc of selectedAccessoriesArray) {
+                if (!acc || acc.includes("chair")) continue;
+
+                const accImg = await loadImage(`assets/images/robots/${baseId}/build-items/png/${baseId}-${acc}.png`);
+                accImg.classList.add('accessory');
+
+                if (robotPartsData?.[baseId]) {
+                    const foundAccessory = robotPartsData[baseId].find(item => item.name === acc);
+                    if (foundAccessory) accImg.style.zIndex = foundAccessory.zIndex;
+                }
+
+                robot.appendChild(accImg);
+                accessoryImgs.push(accImg);
+            }
+        }
+    } catch (error) {
+        console.error("Error loading robot images:", error);
+        robot.style.backgroundColor = 'grey';
+        robot.textContent = 'IMG ERR';
+    }
+
+    gamePlayArea.appendChild(robot);
+
+    await new Promise(r => setTimeout(r, 50)); // Let it render
+
+    const rect = robot.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(robot.querySelector('.base'), 0, 0, width, height);
+    for (const accImg of robot.querySelectorAll('.accessory')) {
+        ctx.drawImage(accImg, 0, 0, width, height);
+    }
+
+    gamePlayArea.removeChild(robot);
+
+    const robotInfo = {
+        element: robot,
+        data,
+        builtReference,
+        canvas,
+        ctx,
+        width,
+        height,
+        currentSegment: 1,
+        movingLeftToRight: true,
+        startPosX: 0,
+        startPosY: 0,
+        randomWaveAmplitude: 0,
+        randomHorizontalRange: 0,
+        initialPositionSet: false,
+    };
+// --- INITIAL RANDOM POSITION ---
+const gamePlayAreaWidth = gamePlayArea.clientWidth;
+const gamePlayAreaHeight = gamePlayArea.clientHeight;
+
+const currentMaxX = gamePlayAreaWidth - width;
+const currentMaxY = gamePlayAreaHeight - height;
+
+robotInfo.currentRobotX = Math.random() * currentMaxX;
+robotInfo.currentRobotY = Math.random() * currentMaxY;
+
+robot.style.transform = `translate(${robotInfo.currentRobotX}px, ${robotInfo.currentRobotY}px)`;
+robotInfo.initialPositionSet = false;
+
+    robotsData.push(robotInfo);
+    return robot;
+}
+
+
+        // --- Robot Animation Logic ---
+function animateRobotContinuous(robotInfo) {
+    //return;
+    const robotElement = robotInfo.element;
+
+    // --- Pre-animation Checks ---
+    if (!gameActive || !gamePlayArea || gamePlayArea.clientWidth === 0 || gamePlayArea.clientHeight === 0) {
+        return; // Do not animate if game is not active or area is not ready
+    }
+
+    const gamePlayAreaWidth = gamePlayArea.clientWidth;
+    const gamePlayAreaHeight = gamePlayArea.clientHeight;
+
+    const robotWidth = robotInfo.width;
+    const robotHeight = robotInfo.height;
+
+    // Define boundaries for movement
+    const minX_in = 0;
+    
+    const maxX_in = Math.max(0, gamePlayAreaWidth - robotWidth);
+    const minY_in = 0;
+    const maxY_in = Math.max(0, gamePlayAreaHeight - robotHeight);
+
+    const offScreenHorizontalHide = robotWidth * (1 - config.offScreenVisibility);
+    const offScreenVerticalHide = robotHeight * (1 - config.offScreenVisibility);
+
+    const minX_out = -offScreenHorizontalHide;
+    const maxX_out = gamePlayAreaWidth + offScreenHorizontalHide - robotWidth;
+    const maxY_out = gamePlayAreaHeight + offScreenVerticalHide - robotHeight;
+
+    let currentMinX, currentMaxX, currentMinY, currentMaxY;
+
+    if (robotInfo.data.base === builtRobot.base) {
+        currentMinX = minX_in;
+        currentMaxX = maxX_in;
+        currentMinY = minY_in;
+        currentMaxY = maxY_in;
+    } else {
+        currentMinX = minX_out;
+        currentMaxX = maxX_out;
+        currentMinY = minY_in;
+        currentMaxY = maxY_out;
+    }
+
+    // --- Initial Positioning (Run once per robot per game start/resize) ---
+    if (!robotInfo.initialPositionSet) {
+        // All robots start with a random Y and horizontal direction
+        //robotInfo.currentRobotY = Math.random() * (currentMaxY - currentMinY) + currentMinY;
+        robotInfo.currentRobotY = Math.random() * (currentMaxY - currentMinY) + currentMinY;
+        robotInfo.movingLeftToRight = Math.random() > 0.5;
+
+        if (robotInfo.data.base === builtRobot.base) {
+            // Built Robot: Starts at left/right edge based on direction
+            robotInfo.currentRobotX = robotInfo.movingLeftToRight ? currentMinX : currentMaxX;
+            robotInfo.currentSegment = 1; // Start with the first segment of the zig-zag
+            robotInfo.segment1TargetY = Math.random() * (currentMaxY - currentMinY) + currentMinY;
+            robotInfo.segment2TargetY = Math.random() * (currentMaxY - currentMinY) + currentMinY;
+        } else {
+            // Random Robots: Random initial position within their bounds, and specific random movement parameters
+            robotInfo.currentRobotX = Math.random() * (currentMaxX - currentMinX) + currentMinX;
+            robotInfo.movingDown = Math.random() > 0.5; // Initial vertical direction
+            robotInfo.randomHorizontalRange = Math.random() * ((currentMaxX - currentMinX) * 0.3) + ((currentMaxX - currentMinX) * 0.2); // Random short-medium horizontal step
+            robotInfo.randomVerticalRange = Math.random() * ((currentMaxY - currentMinY) * 0.3) + ((currentMaxY - currentMinY) * 0.2); // Random short-medium vertical step
+        }
+        robotElement.style.transform = `translate(${robotInfo.currentRobotX}px, ${robotInfo.currentRobotY}px)`;
+        robotInfo.initialPositionSet = true;
+    }
+
+    // --- Helper Functions for Movement Logic ---
+
+    /**
+     * Calculates the next target X and Y for the built robot (zig-zag movement).
+     * @returns {{targetX: number, targetY: number}} The calculated target coordinates.
+     */
+    const calculateBuiltRobotMovement = () => {
+        const halfWidth = (currentMaxX - currentMinX) / 2;
+        let targetX, targetY;
+        let fullTraversalCompleted = false;
+
+        
+        if (robotInfo.movingLeftToRight) { // Overall movement L->R
+            
+       
+            
+    
+            if (robotInfo.currentSegment === 1) {
+                targetX = currentMinX + halfWidth;
+                targetY = robotInfo.segment1TargetY;
+                robotInfo.currentSegment = 2;
+            } else { // currentSegment === 2
+                targetX = currentMaxX;
+                targetY = robotInfo.segment2TargetY;
+                robotInfo.currentSegment = 1;
+                robotInfo.movingLeftToRight = false; // Change overall horizontal direction
+                fullTraversalCompleted = true;
+            }
+        } else { // Overall movement R->L
+            
+                      
+           
+            if (robotInfo.currentSegment === 1) {
+                targetX = currentMaxX - halfWidth;
+                targetY = robotInfo.segment1TargetY;
+                robotInfo.currentSegment = 2;
+            } else { // currentSegment === 2
+                targetX = currentMinX;
+                targetY = robotInfo.segment2TargetY;
+                robotInfo.currentSegment = 1;
+                robotInfo.movingLeftToRight = true; // Change overall horizontal direction
+                fullTraversalCompleted = true;
+            }
+        }
+
+        robotInfo.currentRobotX = targetX;
+        robotInfo.currentRobotY = targetY;
+
+        if (fullTraversalCompleted) {
+            // Re-randomize Y targets for the NEW zig-zag path
+            robotInfo.segment1TargetY = Math.random() * (currentMaxY - currentMinY) + currentMinY;
+            robotInfo.segment2TargetY = Math.random() * (currentMaxY - currentMinY) + currentMinY;
+        }
+        return { targetX, targetY };
+    };
+
+    /**
+     * Calculates the next target X and Y for a random robot (alternating left/right/up/down with random distances).
+     * @returns {{targetX: number, targetY: number}} The calculated target coordinates.
+     */
+    const calculateRandomRobotMovement = () => {
+        let targetX = robotInfo.currentRobotX;
+        let targetY = robotInfo.currentRobotY;
+
+        const currentHorizontalStep = robotInfo.randomHorizontalRange;
+        const currentVerticalStep = robotInfo.randomVerticalRange;
+
+        // Alternate horizontal direction
+        if (robotInfo.movingLeftToRight) {
+            targetX += currentHorizontalStep;
+        } else {
+            targetX -= currentHorizontalStep;
+        }
+
+        // Alternate vertical direction
+        if (robotInfo.movingDown) {
+            targetY += currentVerticalStep;
+        } else {
+            targetY -= currentVerticalStep;
+        }
+
+        // Clamp temporary target coordinates to ensure they don't exceed *their* max allowed bounds
+        // without setting the robotInfo.currentRobotX/Y prematurely.
+        const clampedTargetX = Math.max(currentMinX, Math.min(currentMaxX, targetX));
+        const clampedTargetY = Math.max(currentMinY, Math.min(currentMaxY, targetY));
+
+        // Check if horizontal boundary is hit or exceeded.
+        // If it is, reverse horizontal direction and randomize new horizontal step.
+        if (clampedTargetX === currentMinX || clampedTargetX === currentMaxX) {
+            robotInfo.movingLeftToRight = !robotInfo.movingLeftToRight;
+            robotInfo.randomHorizontalRange = Math.random() * ((currentMaxX - currentMinX) * 0.3) + ((currentMaxX - currentMinX) * 0.2);
+        }
+
+        // Check if vertical boundary is hit or exceeded.
+        // If it is, reverse vertical direction and randomize new vertical step.
+        if (clampedTargetY === currentMinY || clampedTargetY === currentMaxY) {
+            robotInfo.movingDown = !robotInfo.movingDown;
+            robotInfo.randomVerticalRange = Math.random() * ((currentMaxY - currentMinY) * 0.3) + ((currentMaxY - currentMinY) * 0.2);
+        }
+
+        // Update robotInfo's current position for the next calculation
+        robotInfo.currentRobotX = clampedTargetX;
+        robotInfo.currentRobotY = clampedTargetY;
+
+        return { targetX: clampedTargetX, targetY: clampedTargetY };
+    };
+
+    // --- Main Movement Logic ---
+    const move = () => {
+    if (!gameActive || !gamePlayArea || gamePlayArea.clientWidth === 0 || gamePlayArea.clientHeight === 0) {
+        stopRobotAnimation(robotInfo.element);
+        return;
+    }
+
+    // Save previous position BEFORE calculating new target
+    const prevX = robotInfo.currentRobotX;
+
+    let targetX, targetY;
+
+    if (robotInfo.data.base === builtRobot.base) {
+        ({ targetX, targetY } = calculateBuiltRobotMovement());
+    } else {
+        ({ targetX, targetY } = calculateRandomRobotMovement());
+    }
+
+    // Calculate actual direction
+    const deltaX = targetX - prevX;
+    const isActuallyMovingRight = deltaX > 0;
+
+    // Wheel animation logic
+    const movingRobotId = robotInfo.element.dataset.robotbaseid;
+    const numericMovingRobotId = parseInt(movingRobotId, 10);
+    const WheelRobots = [1, 3, 5, 7, 9];
+
+    if (WheelRobots.includes(numericMovingRobotId)) {
+        const lw = robotInfo.element.getElementsByClassName("leftwheel")[0];
+        const rw = robotInfo.element.getElementsByClassName("rightwheel")[0];
+
+        if (lw && rw) {
+            if (isActuallyMovingRight) {
+                lw.classList.remove('MovingLeftAnimation');
+                lw.classList.add('MovingRightAnimation');
+
+                rw.classList.remove('MovingLeftAnimation');
+                rw.classList.add('MovingRightAnimation');
+            } else {
+                lw.classList.remove('MovingRightAnimation');
+                lw.classList.add('MovingLeftAnimation');
+
+                rw.classList.remove('MovingRightAnimation');
+                rw.classList.add('MovingLeftAnimation');
+            }
+        }
+    }
+
+    // Transition and apply new position
+    robotElement.style.transition = `transform ${config.speedSeconds / 2}s linear`;
+    robotElement.style.transform = `translate(${targetX}px, ${targetY}px)`;
+};
+
+
+    // --- Event Listener Management ---
+    const existingListener = transitionListeners.get(robotElement);
+    if (existingListener) {
+        robotElement.removeEventListener('transitionend', existingListener);
+    }
+
+    transitionListeners.set(robotElement, move);
+    robotElement.addEventListener('transitionend', move);
+
+
+    move(); // Initiate the first move immediately
+        }
+
+        function stopRobotAnimation(robotElement) {
+            const listener = transitionListeners.get(robotElement);
+            if (listener) {
+                robotElement.removeEventListener('transitionend', listener);
+                transitionListeners.delete(robotElement);
+            }
+            robotElement.style.transition = 'none'; // Stop current animation
+            // Remove any highlight classes if present
+            robotElement.classList.remove('highlighted-green', 'highlighted-red');
+        }
+
+        // --- Timer Functions ---
+
+        function initializeGameTimer() {
+            gameTimer = config.difficultyLevels[config.currentDifficulty].gameDurationSeconds;
+            updateTimerDisplay(); // Initial update to set liquid level and text
+            // Ensure the liquid starts full and green
+            timerLiquid.style.width = '100%'; // MODIFIED: width for horizontal
+            timerLiquid.style.background = 'linear-gradient(to right, #4CAF50, #8BC34A)'; // MODIFIED: direction for horizontal
+            stopTimer();
+            startCountingDown();
+        }
+
+        function startCountingDown() {
+            stopTimer();
+            timerInterval = setInterval(() => {
+                gameTimer--;
+                updateTimerDisplay();
+                if (gameTimer <= 0) {
+                    stopTimer();
+                    timeIsUp();
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            clearInterval(timerInterval);
+            console.log("Timer paused.");
+        }
+
+        function resumeTimer() {
+            if (gameTimer > 0) {
+                startCountingDown();
+                console.log("Timer resumed.");
+            }
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+
+        function updateTimerDisplay() {
+            timerText.textContent = gameTimer; // Update the number text
+
+            const totalTime = config.difficultyLevels[config.currentDifficulty].gameDurationSeconds;
+            const percentage = (gameTimer / totalTime) * 100;
+
+            timerLiquid.style.width = `${percentage}%`; // MODIFIED: Adjust liquid width
+
+            // Change liquid color based on remaining time
+            if (percentage > 50) {
+                timerLiquid.style.background = 'linear-gradient(to right, #4CAF50, #8BC34A)'; // MODIFIED: direction for horizontal
+            } else if (percentage > 20) {
+                timerLiquid.style.background = 'linear-gradient(to right, #FFC107, #FFEB3B)'; // MODIFIED: direction for horizontal
+            } else {
+                timerLiquid.style.background = 'linear-gradient(to right, #F44336, #E57373)'; // MODIFIED: direction for horizontal
+            }
+        }
+
+        function timeIsUp() {
+            gameActive = false;
+            stopTimer();
+            robotsData.forEach(robotInfo => stopRobotAnimation(robotInfo.element));
+            stopAllDistractions();
+
+            // Hide game elements
+            gamePlayArea.style.opacity = '0';
+            gameStatusText.style.display = 'none';
+            timerLiquid.style.transition = 'none'; // Stop current timer liquid animation
+            timerLiquid.style.width = '0%'; // Drain it immediately for visual effect
+            timerText.textContent = '0';
+            document.querySelector('.timer-container').style.display = 'none';
+            restartButton.style.display = 'none'; // Hide restart button if it was shown
+
+            // Show "Time's Up!" animation
+            timesUpOverlay.classList.add('active');
+            timesUpMessage.style.display = 'block'; // Ensure the message is visible
+
+            // After animation, redirect to the post_game.html, passing the score
+            setTimeout(() => {
+                window.location.href = `game_find_my_robot_post_game.html?score=${currentScore}`;
+            }, 1500); // Allow 1.5 seconds for "Time's Up" animation
+        }
+
+        // --- Mascot Phrase Playback (Placeholder for audio) ---
+        function playMascotPhrase() {
+            if (mascotPhrases.length > 0) {
+                const randomIndex = Math.floor(Math.random() * mascotPhrases.length);
+                const phrase = mascotPhrases[randomIndex];
+                console.log("Mascot says:", phrase);
+                // In a real game, you would play an audio file here:
+                // const audio = new Audio('path/to/mascot_sound.mp3');
+                // audio.play();
+            }
+        }
+
+        // --- Distraction Functions ---
+        function createDistractionElement(type) {
+            const distraction = document.createElement('img');
+            distraction.classList.add('distraction', type);
+            distraction.src = `assets/images/robots/distractions/${type}.gif`;
+            distraction.style.position = 'absolute';
+            distraction.style.left = '-10%'; // Start off-screen
+            distraction.style.top = `${Math.random() * 80 + 10}%`; // Random vertical position
+
+            gamePlayArea.appendChild(distraction);
+            activeDistractions.push(distraction);
+            return distraction;
+        }
+
+        function animateBird(birdElement) {
+            const gameWidth = gamePlayArea.clientWidth;
+            const startX = -birdElement.offsetWidth;
+            const endX = gameWidth;
+            const duration = 5000 + Math.random() * 2000; // 5-7 seconds
+
+            birdElement.style.transition = `transform ${duration / 1000}s linear`;
+            birdElement.style.transform = `translateX(${endX}px)`;
+
+            const onTransitionEnd = () => {
+                birdElement.removeEventListener('transitionend', onTransitionEnd);
+                if (birdElement.parentNode) {
+                    birdElement.parentNode.removeChild(birdElement);
+                }
+                activeDistractions = activeDistractions.filter(d => d !== birdElement);
+            };
+            birdElement.addEventListener('transitionend', onTransitionEnd);
+        }
+
+        function animateBall(ballElement) {
+            const gameHeight = gamePlayArea.clientHeight;
+            const gameWidth = gamePlayArea.clientWidth;
+            const startX = Math.random() * gameWidth * 0.8;
+            const startY = -ballElement.offsetHeight;
+            const endY = gameHeight - ballElement.offsetHeight;
+            const duration = 1500 + Math.random() * 500;
+
+            ballElement.style.left = `${startX}px`;
+            ballElement.style.top = `${startY}px`;
+
+            let bounceCount = 0;
+            const maxBounces = 3;
+
+            const bounce = () => {
+                if (!gameActive) { // Check `gameActive` here as well
+                    if (ballElement.parentNode) ballElement.parentNode.removeChild(ballElement);
+                    activeDistractions = activeDistractions.filter(d => d !== ballElement);
+                    return;
+                }
+                if (bounceCount >= maxBounces) {
+                    ballElement.style.transition = `transform 1s ease-out, opacity 1s ease-out`;
+                    ballElement.style.transform = `translateY(${gameHeight}px) translateX(${Math.random() > 0.5 ? gameWidth : -ballElement.offsetWidth}px)`;
+                    ballElement.style.opacity = '0';
+                    setTimeout(() => {
+                        if (ballElement.parentNode) ballElement.parentNode.removeChild(ballElement);
+                        activeDistractions = activeDistractions.filter(d => d !== ballElement);
+                    }, 1000);
+                    return;
+                }
+
+                ballElement.style.transition = `transform ${duration / 2000}s ease-in-out`;
+                if (bounceCount % 2 === 0) {
+                    ballElement.style.transform = `translateY(${endY - startY}px)`;
+                } else {
+                    ballElement.style.transform = `translateY(${startY - endY}px)`;
+                }
+                bounceCount++;
+
+                const onTransitionEnd = () => {
+                    ballElement.removeEventListener('transitionend', onTransitionEnd);
+                    setTimeout(bounce, 50);
+                };
+                ballElement.addEventListener('transitionend', onTransitionEnd);
+            };
+            bounce();
+        }
+
+        function startDistractions() {
+            stopAllDistractions();
+
+            const currentDifficultySettings = config.difficultyLevels[config.currentDifficulty];
+
+            currentDifficultySettings.distractions.forEach(distractionConfig => {
+                let intervalId;
+                if (distractionConfig.type === 'bird') {
+                    intervalId = setInterval(() => {
+                        if (gameActive) { // Only spawn if gameActive
+                            const bird = createDistractionElement('bird');
+                            animateBird(bird);
+                        }
+                    }, distractionConfig.interval);
+                } else if (distractionConfig.type === 'ball') {
+                    intervalId = setInterval(() => {
+                        if (gameActive) { // Only spawn if gameActive
+                            const ball = createDistractionElement('ball');
+                            animateBall(ball);
+                        }
+                    }, distractionConfig.interval);
+                }
+                if (intervalId) {
+                    distractionIntervals.push(intervalId);
+                }
+            });
+            console.log(`Started distractions for difficulty: ${config.currentDifficulty}`);
+        }
+
+        function stopAllDistractions() {
+            distractionIntervals.forEach(clearInterval);
+            distractionIntervals = [];
+            activeDistractions.forEach(d => {
+                if (d.parentNode) d.parentNode.removeChild(d);
+            });
+            activeDistractions = [];
+            console.log("All distractions stopped and removed.");
+        }
+
+
+        // --- Scene Loading (Simplified for demonstration) ---
+        async function loadNewScene() {
+            pauseTimer();
+            stopAllDistractions();
+            gameStatusText.textContent = "Loading new scene...";
+            gameOverlay.classList.remove('active'); // Hide overlay during scene load
+
+            robotsData.forEach(robotInfo => {
+                stopRobotAnimation(robotInfo.element);
+                if (robotInfo.element.parentNode) {
+                    robotInfo.element.parentNode.removeChild(robotInfo.element);
+                }
+            });
+            robotsData = [];
+
+            const randomIndex = Math.floor(Math.random() * playAreaBackgrounds.length);
+            const selectedPlayAreaSvg = playAreaBackgrounds[randomIndex];
+            gamePlayArea.style.backgroundImage = `url('assets/images/robots/play_areas/${selectedPlayAreaSvg}')`;
+            gamePlayArea.style.backgroundColor = '';
+
+            gamePlayArea.innerHTML = '<p id="gameStatus" style="position: absolute; bottom: 10px; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); z-index: 20;">Find the built robot!</p>';
+            gameStatusText = document.getElementById('gameStatus');
+
+            gameActive = true;
+
+            await addGameElements();
+            resumeTimer();
+            startDistractions();
+            gameStatusText.textContent = "Find the built robot!";
+        }
+
+        // --- Game Initialization & Reset Functions ---
+
+        function cleanupGameElements() {
+            robotsData.forEach(robotInfo => {
+                stopRobotAnimation(robotInfo.element);
+                if (robotInfo.element.parentNode) {
+                    robotInfo.element.parentNode.removeChild(robotInfo.element);
+                }
+            });
+            robotsData = [];
+            stopAllDistractions();
+            gamePlayArea.innerHTML = '<p id="gameStatus" style="position: absolute; bottom: 10px; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); z-index: 20;">Game loading...</p>';
+            gameStatusText = document.getElementById('gameStatus');
+            gameStatusText.textContent = "Game loading...";
+            restartButton.style.display = 'none';
+            gameOverlay.classList.remove('active'); // Ensure overlay is hidden
+
+            // Ensure Time's Up overlay is hidden and reset for next game
+            timesUpOverlay.classList.remove('active');
+            timesUpMessage.style.display = 'none';
+        }
+
+        async function addGameElements() {
+            gameStatusText.textContent = "Loading robots...";
+            const currentRobotCount = config.difficultyLevels[config.currentDifficulty].randomRobotCount;
+            const foundStudentBuiltRobot = Robotsetting.find(robot => robot.id === builtRobotId);
+            const robot = await createRobotElement(foundStudentBuiltRobot, foundStudentBuiltRobot,"built");
+            robot.dataset.robottype="built";
+            
+            gamePlayArea.appendChild(robot);
+            if(gameStarted==0)
+                robotsReadyToAnimate.push(robotsData[robotsData.length - 1]); // store it for later
+            else 
+                animateRobotContinuous(robotsData[robotsData.length - 1]);
+
+            // for (let i = 0; i < config.builtRobotCount; i++) {
+            //     const robot = await createRobotElement(builtRobot, builtRobot);
+            //     robot.dataset.robottype="built";
+            //     gamePlayArea.appendChild(robot);
+            //     animateRobotContinuous(robotsData[robotsData.length - 1]);
+            
+            // }
+            
+            var robots_ids = [1, 2, 3, 4, 5, 6, 7, 9, 10];
+            const available_robots = robots_ids.filter(id => id !== builtRobotId);
+            
+            for (let i = 0; i < currentRobotCount; i++) {
+                //const bot = generateRandomBot();
+                var randomIndex = Math.floor(Math.random() * available_robots.length);
+                var randomRobotId = available_robots[randomIndex];
+                
+                console.log("Random robot id " + randomRobotId);
+                
+                const foundRobot = Robotsetting.find(robot => robot.id === randomRobotId);
+                const robot = await createRobotElement(foundRobot, foundStudentBuiltRobot,"random");
+                robot.dataset.robottype="no";
+                robot.dataset.robotid = "random" + i;
+                
+                gamePlayArea.appendChild(robot);
+                if(gameStarted==0)
+                    robotsReadyToAnimate.push(robotsData[robotsData.length - 1]); // store it for later
+                else 
+                    animateRobotContinuous(robotsData[robotsData.length - 1]);
+                }
+        }
+
+        async function startGame() {
+            console.log(`Starting new game at ${config.currentDifficulty} difficulty...`);
+            gameActive = true;
+            resetScore(); // Reset score at the start of each game
+
+            const storedTheme = localStorage.getItem('selectedTheme') || 'dino';
+            const { color1, color2 } = themeColors[storedTheme] || { color1: '#000', color2: '#FFF' };
+            document.documentElement.style.setProperty('--color1', color1);
+            document.documentElement.style.setProperty('--color2', color2);
+
+            if (gamePlayArea) {
+                const randomIndex = Math.floor(Math.random() * playAreaBackgrounds.length);
+                const selectedPlayAreaSvg = playAreaBackgrounds[randomIndex];
+                gamePlayArea.style.backgroundImage = `url('assets/images/robots/play_areas/${selectedPlayAreaSvg}')`;
+                gamePlayArea.style.backgroundColor = '';
+            } else {
+                console.error("Game play area element not found!");
+            }
+
+            if (borderImage) {
+                borderImage.src = `assets/images/${storedTheme}.svg`;
+                if (borderImage.complete && borderImage.naturalWidth > 0 && borderImage.naturalHeight > 0) {
+                    handleResizeOrImageLoad();
+                } else {
+                    borderImage.onload = handleResizeOrImageLoad;
+                    borderImage.onerror = () => {
+                        console.error(`Failed to load border image: assets/images/${storedTheme}.svg`);
+                        handleResizeOrImageLoad(true);
+                    };
+                }
+            } else {
+                console.error("Border image element not found!");
+            }
+
+            cleanupGameElements();
+            await addGameElements();
+            // initializeGameTimer(); // This will also update the new visual timer
+            gameStatusText.textContent = "Find the built robot!";
+            startDistractions();
+
+            // Ensure game elements are visible at game start
+            gamePlayArea.style.opacity = '1';
+            gameStatusText.style.display = 'block';
+            document.querySelector('.timer-container').style.display = 'flex';
+        }
+
+        function resetGame() {
+            console.log("Resetting game...");
+            gameActive = false; // Temporarily false during reset
+            stopTimer();
+            cleanupGameElements();
+            startGame(); // startGame will set gameActive back to true
+        }
+
+        // --- Score Management ---
+        // Initialize score at the start of each game
+        function resetScore() {
+            currentScore = 0;
+        }
+
+        // Increment score when a robot is found
+        function incrementScore() {
+            currentScore++;
+        }
+
+        // --- Event Listeners ---
+
+        gamePlayArea.addEventListener('click', (event) => {
+            if (!gameActive || gameTimer <= 0) return;
+
+            const clickX = event.clientX;
+            const clickY = event.clientY;
+
+            for (let i = robotsData.length - 1; i >= 0; i--) {
+                const robotData = robotsData[i];
+                const { element, canvas, width, height, data, builtReference } = robotData;
+
+                const rect = element.getBoundingClientRect();
+                const x = clickX - rect.left;
+                const y = clickY - rect.top;
+
+                if (x < 0 || y < 0 || x >= width || y >= height) continue;
+
+                const pixel = robotData.ctx.getImageData(x, y, 1, 1).data;
+                const alpha = pixel[3];
+
+                if (alpha > 10) {
+                    playMascotPhrase();
+
+                    const isMatch =
+                        data.base === builtReference.base &&
+                        JSON.stringify(data.accessories.sort()) === JSON.stringify(builtReference.accessories.sort());
+
+                    if (isMatch) {
+                        incrementScore(); // Increment score on finding the built robot
+                        gameActive = false;
+                        pauseTimer();
+                        stopAllDistractions();
+                          // Generate a random index
+                        const randomIndex = Math.floor(Math.random() * audioFiles.length);
+                        const selectedAudio = audioFiles[randomIndex];
+
+                        playRandomAudio(randomIndex);
+
+                        element.classList.add('highlighted-green');
+                        gameStatusText.textContent = selectedAudio.text;
+                      
+                        wellDoneMessage.textContent = selectedAudio.text;
+                        wellDoneMessage.style.display = 'block';
+                        continueButton.style.display = 'block';
+                        gameOverlay.classList.add('active');
+
+                    } else {
+                        element.classList.add('highlighted-red');
+                        gameStatusText.textContent = "Oops! That's not it. Try again.";
+                        setTimeout(() => {
+                            element.classList.remove('highlighted-red');
+                            gameStatusText.textContent = "Find the built robot!";
+                        }, 300);
+                        minusSeconds += 2;
+                          const minusBox = document.getElementById('minusScoreBox');
+                        minusBox.textContent = `-${minusSeconds}`;
+                        minusBox.style.display = 'flex'; // make sure it's visib
+                        gameTimer -=2; 
+                    }
+                    break;
+                }
+            }
+        });
+
+        const handleResizeOrImageLoad = (isError = false) => {
+            if (!gameContainer || !borderImage) {
+                console.error("Game container or border image element not found during resize/load handling.");
+                return;
+            }
+
+            let imgWidth = isError ? 1600 : borderImage.naturalWidth;
+            let imgHeight = isError ? 900 : borderImage.naturalHeight;
+
+            if (imgWidth === 0 || imgHeight === 0) {
+                console.warn("Border image has zero dimensions, using fallback aspect ratio (16:9).");
+                imgWidth = 16;
+                imgHeight = 9;
+            }
+
+            const aspectRatio = imgWidth / imgHeight;
+
+            gameContainer.style.height = '100vh';
+            gameContainer.style.width = `${window.innerHeight * aspectRatio}px`;
+
+            if (gameContainer.offsetWidth > window.innerWidth) {
+                gameContainer.style.width = '100vw';
+                gameContainer.style.height = `${window.innerWidth / aspectRatio}px`;
+            }
+        };
+
+        window.addEventListener('resize', () => {
+            handleResizeOrImageLoad();
+            if (gameActive) {
+                 robotsData.forEach(robotInfo => {
+                     robotInfo.initialPositionSet = false;
+                     stopRobotAnimation(robotInfo.element);
+                     animateRobotContinuous(robotInfo);
+                 });
+            }
+        });
+
+        continueButton.addEventListener('click', () => {
+            gameOverlay.classList.remove('active');
+            wellDoneMessage.style.display = 'none';
+            continueButton.style.display = 'none';
+            loadNewScene(); // This will reset score for a new 'game'
+        });
+
+        restartButton.addEventListener('click', resetGame);
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            startGame();
+        });
+
+      const audioFiles = [
+        {
+            path: 'assets/audio/Happy House Dialogue_No1_Robot Game_Self Esteem_Middle Game Sayings_Great Job-44k.wav',
+            text: 'Great Job!' // Add your specific text tip here
+        },
+        {
+            path: 'assets/audio/Happy House Dialogue_No1_Robot Game_Self Esteem_Middle Game Sayings_There You Are-44k.wav',
+            text: 'There you are!' // Add your specific text tip here
+        },
+        {
+            path: 'assets/audio/Happy House Dialogue_No1_Robot Game_Self Esteem_Middle Game Sayings_You Found Yourself-44k.wav',
+            text: 'You found yourself!' // Add your specific text tip here
+        },
+        {
+            path: 'assets/audio/Happy House Dialogue_No1_Robot Game_Self Esteem_Middle Game Sayings_You Stand Out-44k.wav',
+            text: 'You stand out!' // Add your specific text tip here
+        },
+        {
+            path: 'assets/audio/Happy House Dialogue_No1_Robot Game_Self Esteem_Middle Game Sayings_You are Looking Great-44k.wav',
+            text: 'You are looking great!' // Add your specific text tip here
+        }
+        // Add all your audio file paths and their corresponding texts here
+    ];
+
+        const audioPlayer = document.getElementById('audioPlayer');
+        const playButton = document.getElementById('playRandomAudio');
+
+        // Method to play a random audio file
+        function playRandomAudio(audioIndex) {
+            if (audioFiles.length === 0) {
+                console.warn("No audio files defined in the array.");
+                return;
+            }
+
+            
+
+            // Get the random audio file path
+            const selectedAudio = audioFiles[audioIndex];
+
+            // Set the source of the audio player
+            audioPlayer.src = selectedAudio.path;
+
+            // --- IMPORTANT CHANGE HERE: Explicitly unmute the audio player ---
+            audioPlayer.muted = false; 
+
+            // Attempt to play the audio.
+            const playPromise = audioPlayer.play();
+
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    console.log(`Playing: ${selectedAudio}`);
+                    // You can optionally reset the muted state after playing if needed,
+                    // or leave it unmuted for subsequent plays.
+                }).catch(error => {
+                    console.error(`Playback of ${selectedAudio} was prevented:`, error);
+                    // This error should now be less common if it's a direct user click
+                    // and the audio is unmuted.
+                    alert("Audio playback failed. The browser might still be blocking (rare for direct clicks). Check console.");
+                });
+            }
+}
+        
+document.getElementById('startGameBtn').addEventListener('click', () => {
+  document.getElementById('gameStartOverlay').style.display = 'none';
+  gameActive = true;
+
+  // Start animation for all robots that were waiting
+  robotsReadyToAnimate.forEach(robotInfo => {
+    animateRobotContinuous(robotInfo);
+  });
+   initializeGameTimer(); // This will also update the new visual timer
+  robotsReadyToAnimate = []; // Clear the queue
+  gameStarted = 1;
+});
+
+    </script>
+    
+
+</body>
+</html>

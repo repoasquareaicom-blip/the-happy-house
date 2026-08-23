@@ -1,0 +1,12 @@
+API_KEYS.json
+*.log
+*log.txt
+*logs.txt
+error_log
+__MACOSX/
+.DS_Store
+._*
+~$*
+*.zip
+vendor/
+uploads/

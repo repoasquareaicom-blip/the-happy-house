@@ -1,0 +1,17 @@
+<?php
+return [
+    // Global Stripe mode
+    'mode' => 'test', // change to 'live' on production
+
+    'test' => [
+        'secret_key' => 'sk_test_51QPb6I06kM66h4BbSzEOV2OuqXUClMU4qoOfkKmmNg9Ql0eadUojczoiJfwc8chu3FQhqo7u9jAVgcJqQh08Vawz00ygwFgiAK',
+        'publishable_key' => 'pk_test_51QPb6I06kM66h4BbvYmIJtsaCCLKH3gG1hXdmAtFr4ELBycqHuJepVOCwKFKwajwdoU4LjCrP8mF4prGrdO3F5hJ00btWPOjnh',
+        'price_id'   => 'price_1QbMdA06kM66h4BbUww9AZWb',
+    ],
+
+    'live' => [
+        'secret_key' => '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',
+        'publishable_key' => 'pk_live_51QPb6I06kM66h4Bbn7q5MJ2r5qO9DlgYHSpcJvHCi9DY0yc0FDR65xk28p1QKFH29ny1JL9jovmA10JD2rJnXtvc003eECAp30',
+        'price_id'   => 'price_1T0XBb06kM66h4Bb3GwdeFy4',
+    ],
+];

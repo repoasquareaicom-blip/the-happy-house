@@ -1,0 +1,92 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" width="72" height="72">
+	<title>L-wheel-1</title>
+	<defs>
+		<clipPath clipPathUnits="userSpaceOnUse" id="cp1">
+			<path d="m437.08-439.84v588.43h-824.8v-588.43z"/>
+		</clipPath>
+	</defs>
+	<style>
+		.s0 { fill: #7c868c } 
+		.s1 { fill: #bec0be } 
+		.s2 { fill: none;stroke: #525d5f;stroke-linecap: round;stroke-linejoin: round;stroke-width: 2.1 } 
+		.s3 { fill: none;stroke: #929092;stroke-linecap: round;stroke-linejoin: round;stroke-width: 2.1 } 
+		.s4 { fill: #ffffff } 
+	</style>
+	<g id="layer1">
+		<g id="Folder 2">
+			<g id="g21329">
+				<path id="path21331" class="s0" d="m14.4 44l3.8 7.1 7.5 6.3 9.8 2.5 9.2-1.8 6.7-4.2 6.7-7.4 1.4-13.8-2.8-7.4-4.6-6-8.1-5.2-10.6-1.1-8.8 3.2-5.3 4.2-4.9 6.7-0.7 5.6-11.3-4.9 1.7-6 7.1-10.2 13-8.1 12-2.1 15.2 3.5 12 9.5 7.1 13.8v16.9l-6.7 11.3-7.5 8.1-11.6 4.9-13.8 1.4-11.9-4.9-12.4-10.6-4.6-11.6 0.4-18 10.9 4.2z"/>
+			</g>
+			<path id="path21333" class="s1" d="m34.5 17.2h5.3v38.1h-5.3z"/>
+			<path id="path21335" class="s1" d="m17.5 33.5h37.8v5.2h-37.8z"/>
+			<g id="g21337">
+				<path id="path21339" class="s1" d="m48.2 51.1l3.6-3.5-26.1-26.8-3.9 3.5z"/>
+			</g>
+			<g id="g21341">
+				<path id="path21343" class="s1" d="m21.8 49.3l4.2 2.9 25.4-27.6-3.5-3.5z"/>
+			</g>
+			<g id="g21345">
+				<path id="path21347" class="s1" d="m32.4 17.6h10.9l8.1 7 4.9 10.4-2.8 10.1-4.9 6-6.7 3.9-9.2 0.7 1.1 4.2 9.5-1 8.8-4.3 6.4-10.2 1-13.1-6.3-10.9-9.9-6.3-10.6-0.8-10.9 4.3-6.7 9.2-2.5 11.9 3.9 11 8.4 7.4 10.6 2.8-1-4.6-7.8-2.1-6-5.3-3.2-6.3 0.4-11.7 6-8.1z"/>
+			</g>
+			<g id="g21349">
+				<g id="Clip-Path: Clip-Path: g21351" clip-path="url(#cp1)">
+					<g id="Clip-Path: g21351">
+						<g id="g21351">
+							<g id="g21357">
+								<path id="path21359" fill-rule="evenodd" class="s2" d="m36.3 59.6c-12.9 0-23.3-10.4-23.3-23.3 0-12.9 10.4-23.3 23.3-23.3 12.8 0 23.2 10.4 23.2 23.3 0 12.9-10.4 23.3-23.2 23.3z"/>
+							</g>
+							<g id="g21361">
+								<path id="path21363" fill-rule="evenodd" class="s3" d="m36.4 55.7c-10.6 0-19.2-8.6-19.2-19.2 0-10.7 8.6-19.3 19.2-19.3 10.6 0 19.2 8.6 19.2 19.2 0 10.7-8.6 19.3-19.2 19.3z"/>
+							</g>
+							<g id="g21365">
+								<path id="path21367" class="s3" d="m34.6 17.4v38.1"/>
+							</g>
+							<g id="g21369">
+								<path id="path21371" class="s3" d="m39.7 17.7v37.5"/>
+							</g>
+							<g id="g21373">
+								<path id="path21375" class="s3" d="m17.6 38.7h37.4"/>
+							</g>
+							<g id="g21377">
+								<path id="path21379" class="s3" d="m17.9 33.6h37.5"/>
+							</g>
+							<g id="g21381">
+								<path id="path21383" class="s3" d="m39.8 42.6l8.3 8.6"/>
+							</g>
+							<g id="g21385">
+								<path id="path21387" class="s3" d="m21.9 24.2l9.1 9.4"/>
+							</g>
+							<g id="g21389">
+								<path id="path21391" class="s3" d="m43 38.7l8.8 9"/>
+							</g>
+							<g id="g21393">
+								<path id="path21395" class="s3" d="m25.5 20.7l9.1 9.3"/>
+							</g>
+							<g id="g21397">
+								<path id="path21399" class="s3" d="m31.5 38.7l-9.4 10"/>
+							</g>
+							<g id="g21401">
+								<path id="path21403" class="s3" d="m47.8 21.2l-8.1 8.7"/>
+							</g>
+							<g id="g21405">
+								<path id="path21407" class="s3" d="m34.4 43l-8.5 9.2"/>
+							</g>
+							<g id="g21409">
+								<path id="path21411" class="s3" d="m51.5 24.6l-8.3 9"/>
+							</g>
+							<g id="g21413">
+								<path id="path21415" fill-rule="evenodd" class="s4" d="m37.2 40.9c-2.7 0-4.8-2.1-4.8-4.8 0-2.7 2.1-4.8 4.8-4.8 2.6 0 4.7 2.1 4.7 4.8 0 2.7-2.1 4.8-4.7 4.8z"/>
+							</g>
+							<g id="g21417">
+								<path id="path21419" fill-rule="evenodd" class="s3" d="m37.2 40.9c-2.7 0-4.8-2.1-4.8-4.8 0-2.7 2.1-4.8 4.8-4.8 2.6 0 4.7 2.1 4.7 4.8 0 2.7-2.1 4.8-4.7 4.8z"/>
+							</g>
+							<g id="g21421">
+								<path id="path21423" fill-rule="evenodd" class="s2" d="m36.1 70.8c-19.3 0-34.8-15.5-34.8-34.7 0-19.2 15.5-34.7 34.8-34.7 19.2 0 34.7 15.5 34.7 34.7 0 19.2-15.5 34.7-34.7 34.7z"/>
+							</g>
+						</g>
+					</g>
+				</g>
+			</g>
+		</g>
+	</g>
+</svg>

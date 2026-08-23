@@ -1,0 +1,1 @@
+<b>Thank you for signing up with The Happy House</b><br><span style='color:brown;'>OK OK ok ok from template in api itself</span>

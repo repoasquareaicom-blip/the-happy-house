@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Mobile Input Event Test</title>
+</head>
+<body>
+
+<input type="text" id="txtInput" placeholder="Type here..." style="padding:10px; font-size:16px;">
+
+<script>
+const input = document.getElementById('txtInput');
+
+// Listen for a custom key event
+window.addEventListener('customKeyDown', (event) => {
+    alert('Custom key event fired! Key 3: ' + event.detail.key);
+});
+
+// Input event
+input.addEventListener('input', (event) => {
+    const value = event.target.value;
+    const lastChar = value.slice(-1);
+    if (lastChar) {
+        // Dispatch a custom event instead of KeyboardEvent
+        const customEvent = new CustomEvent('customKeyDown', {
+            bubbles: true,
+            cancelable: true,
+            detail: { key: lastChar }
+        });
+        window.dispatchEvent(customEvent);
+    }
+});
+</script>
+
+</body>
+</html>

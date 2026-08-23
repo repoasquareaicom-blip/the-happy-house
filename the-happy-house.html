@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Device Not Supported</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f7fa;
+        }
+
+        .container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            background-color: rgb(216, 164, 153);
+            transition: opacity 0.5s ease;
+        }
+
+        .logo {
+            max-width: 180px;
+            margin-bottom: 20px;
+            /* Simple floating animation to make the page feel alive */
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .text {
+            font-size: 22px;
+            font-family: 'Calibri', cursive, sans-serif;
+            color: #333;
+            line-height: 1.4;
+        }
+
+        /* Hide content if we are about to redirect */
+        .hidden {
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="main-container">
+    <img src="assets/images/logo.png" alt="Logo" class="logo">
+
+    <div class="text">
+        This game is not supported on mobile phones.<br>
+        Please use a tablet or desktop device.
+    </div>
+</div>
+
+<script>
+function checkSizeAndReturn() {
+    // We match the threshold to 600px to ensure iPads (768px+) 
+    // are treated as "Desktop/Tablet" and sent back.
+    
+    const isSmallScreen = window.innerWidth <= 600;
+
+    if (!isSmallScreen) {
+        window.location.href = "start";
+    }
+
+}
+
+// Optional: Run this on window resize so it redirects automatically 
+// if a tablet user rotates from Portrait to Landscape
+window.onresize = checkSizeAndReturn;
+
+    // 1. Check immediately (in case they refreshed while large)
+    checkSizeAndReturn();
+
+    // 2. Listen for window resizing
+    window.addEventListener('resize', function() {
+        checkSizeAndReturn();
+    });
+
+    // 3. Listen for orientation changes (common on tablets)
+    window.addEventListener("orientationchange", function() {
+        // Small delay to let the browser update dimensions
+        setTimeout(checkSizeAndReturn, 200);
+    });
+</script>
+
+</body>
+</html>

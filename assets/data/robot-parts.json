@@ -1,0 +1,41 @@
+{
+  "1": [
+    { "name": "backpack", "zIndex": 1 },
+    { "name": "hat", "zIndex": 3 },
+    { "name": "hearing-aid", "zIndex": 4 },
+    { "name": "sunglasses", "zIndex": 5 },
+    { "name": "bow-tie", "zIndex": 6 },
+    { "name": "wheel-chair", "zIndex": 2 },
+    { "name": "headphones", "zIndex": 7 }
+  ],
+  "2": [
+    { "name": "backpack", "zIndex": 1 },
+    { "name": "scarf", "zIndex": 3 },
+    { "name": "hearing-aid", "zIndex": 5 },
+    { "name": "sunglasses", "zIndex": 6 },
+    { "name": "wheel-chair", "zIndex": 2 }
+  ],
+  "3": [
+    { "name": "backpack", "zIndex": 1 },
+    { "name": "magnifier", "zIndex": 5 },
+    { "name": "hearing-aid", "zIndex": 5 },
+    { "name": "sunglasses", "zIndex": 6 },
+    { "name": "wheel-chair", "zIndex": 2 },
+    { "name": "headphones", "zIndex": 3 }
+  ],
+  "4": [
+    { "name": "backpack", "zIndex": 1 },
+    { "name": "hearing-aid", "zIndex": 4 },
+    { "name": "sunglasses", "zIndex": 3 },
+    { "name": "hat", "zIndex": 4 },
+    { "name": "scarf", "zIndex": 5 }
+  ],
+  "5": [
+    { "name": "backpack", "zIndex": 1 },
+    { "name": "hearing-aid", "zIndex": 4 },
+    { "name": "sunglasses", "zIndex": 4 },
+    { "name": "bow-tie", "zIndex": 6 },
+    { "name": "scarf", "zIndex": 5 },
+    { "name": "wheel-chair", "zIndex": 2 }
+  ]
+}
