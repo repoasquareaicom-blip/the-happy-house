@@ -411,8 +411,6 @@ foreach ($_subscription_data as $_subscription_details) {
                     </button>
                 </a>
             <?php endif; ?>
-
-            <a href="#" id="changePassword"><i class="fas fa-key"></i> Change Password</a>
         </nav>
     </aside>
 </div>
@@ -567,46 +565,6 @@ $(document).ready(function () {
                 $('#loader').hide();
                 $('#validation-message').html('<div>Updated successfully!</div>');
                 $('.title').text($('#schoolName').val());
-            },
-            error: function (xhr, status, error) {
-                $('#loader').hide();
-                // Log the full response for debugging
-                console.error("Error response:", xhr.responseText);
-                console.error("Status:", status);
-                console.error("Error:", error);
-
-                // Alert the error message to the user (optional)
-                alert('Failed to update profile. Error: ' + xhr.responseText);
-        }
-        });
-    });
-});
-
-
-$(document).ready(function() {
-    // Handle the click event for the "Change Password" link
-    $('#changePassword').on('click', function(e) {
-        e.preventDefault(); // Prevent the default anchor behavior
-
-        // Retrieve the email from a variable or element (you may want to replace this with your actual email retrieval)
-        const emailID = $('#emailID').val();
-        $('#loader').show(); 
-        // Trigger the AJAX request
-        $.ajax({
-            url: 'AJAX.php', // Path to your AJAX handler
-            type: 'POST',
-            data: {
-                method: 'school_admin_reset_password_request',
-                email: emailID
-            },
-            success: function(response) {
-                $('#loader').hide();
-                let data = response;
-                if (data.status == 'success') {
-                    alert(data.message); // Display success message
-                } else {
-                    alert(data.message); // Display error message
-                }
             },
             error: function (xhr, status, error) {
                 $('#loader').hide();
@@ -861,4 +819,3 @@ $(document).ready(function() {
 </script>
 
 </html>
-
