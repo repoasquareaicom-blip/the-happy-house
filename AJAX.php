@@ -21,9 +21,12 @@ if ($conn->connect_error) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $method = $_POST['method'];
 
-    if ($method === 'getActiveSubscription') {
+    if ($method === 'getAllSchools') {
         requireAdminSession();
-        getActiveSubscription($conn);
+        getAllSchools($conn);
+    } else if ($method === 'getActiveSubscription') {
+        requireAdminSession();
+        getAllSchools($conn);
     } else if ($method === 'getCancelledSubscription') {
         requireAdminSession();
         getCancelledSubscription($conn);
@@ -58,14 +61,13 @@ function requireAdminSession()
     }
 }
 
-function getActiveSubscription($conn) {
-    // Select schools where EITHER the Games OR the Curriculum is currently active
+function getAllSchools($conn) {
     $sql = "SELECT id, school_name, school_admin_email,
         subscription_id, subscription_start, subscription_end, status, cancel_at,
-        curriculum_sub_id, curriculum_start, curriculum_end, curriculum_status, curriculum_cancel_at
+        curriculum_sub_id, curriculum_start, curriculum_end, curriculum_status, curriculum_cancel_at,
+        IF(login_locked_until IS NOT NULL AND login_locked_until > NOW(), 'Locked', 'Active') AS login_status
         FROM school_master 
-        WHERE subscription_end > NOW() 
-        OR curriculum_end > NOW();";
+        ORDER BY school_name ASC;";
     
     $result = $conn->query($sql);
 

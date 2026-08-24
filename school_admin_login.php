@@ -139,7 +139,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
 
         <div id="login-links" style="text-align:center">
-            <p><a href="school_admin_forgot_password.php">Forgot Password?</a></p>
             <p class="login-support-message">Having problems logging in?<br>Please call Youth Dimension on (03) 9844 1944</p>
         </div>
     </div>

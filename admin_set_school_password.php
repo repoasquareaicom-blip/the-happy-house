@@ -66,7 +66,7 @@ $updated = $_data->executePrepared(
 );
 
 if ($updated) {
-    echo json_encode(['status' => 'success', 'message' => 'Password updated successfully.']);
+    echo json_encode(['status' => 'success', 'message' => 'Password reset successfully. The school can now log in with the new password.']);
 } else {
     echo json_encode(['status' => 'error', 'message' => 'Unable to update password.']);
 }
