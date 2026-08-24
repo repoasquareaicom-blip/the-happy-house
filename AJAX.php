@@ -21,15 +21,13 @@ if ($conn->connect_error) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $method = $_POST['method'];
 
-    if ($method === 'getAllSchools') {
-        requireAdminSession();
-        getAllSchools($conn);
-    } else if ($method === 'getActiveSubscription') {
-        requireAdminSession();
-        getAllSchools($conn);
+    if ($method === 'getActiveSubscription') {
+        getActiveSubscription($conn);
     } else if ($method === 'getCancelledSubscription') {
-        requireAdminSession();
         getCancelledSubscription($conn);
+    } else if ($method === 'getSchoolLoginSupport') {
+        requireAdminSession();
+        getSchoolLoginSupport($conn);
     } else if ($method === 'getLockedSchools') {
         requireAdminSession();
         getLockedSchools($conn);
@@ -61,13 +59,14 @@ function requireAdminSession()
     }
 }
 
-function getAllSchools($conn) {
+function getActiveSubscription($conn) {
+    // Select schools where EITHER the Games OR the Curriculum is currently active
     $sql = "SELECT id, school_name, school_admin_email,
         subscription_id, subscription_start, subscription_end, status, cancel_at,
-        curriculum_sub_id, curriculum_start, curriculum_end, curriculum_status, curriculum_cancel_at,
-        IF(login_locked_until IS NOT NULL AND login_locked_until > NOW(), 'Locked', 'Active') AS login_status
+        curriculum_sub_id, curriculum_start, curriculum_end, curriculum_status, curriculum_cancel_at
         FROM school_master 
-        ORDER BY school_name ASC;";
+        WHERE subscription_end > NOW() 
+        OR curriculum_end > NOW();";
     
     $result = $conn->query($sql);
 
@@ -106,6 +105,25 @@ function getLockedSchools($conn) {
             WHERE login_locked_until IS NOT NULL
             AND login_locked_until > NOW()
             ORDER BY login_locked_until DESC";
+
+    $result = $conn->query($sql);
+
+    $data = [];
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+    }
+
+    echo json_encode($data);
+}
+function getSchoolLoginSupport($conn) {
+    $sql = "SELECT id, school_name, school_admin_email, failed_login_attempts,
+            IF(login_locked_until IS NOT NULL AND login_locked_until > NOW(), 'Locked', 'Active') AS login_status
+            FROM school_master
+            WHERE school_admin_email IS NOT NULL
+            AND school_admin_email <> ''
+            ORDER BY school_name ASC";
 
     $result = $conn->query($sql);
 
