@@ -162,6 +162,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <style>
         input[readonly] { background-color: #f0f0f0; cursor: not-allowed; border: 1px solid #ccc; }
         .existing-user-note { background-color: #e7f3ff; padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 0.9em; color: #0056b3; border: 1px solid #b8daff; }
+        .signup-help-message { margin: 18px 0 0; color: #666; font-size: 0.9em; line-height: 1.45; text-align: center; }
     </style>
 </head>
 <body>
@@ -202,6 +203,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <button type="submit" id="signup-submit" class="logo-theme-button">
                     <?php echo $is_existing_user ? 'Finalize Setup' : 'Create Account'; ?>
                 </button>
+                <p class="signup-help-message">
+                    Having problems creating your account?<br>
+                    Please call Youth Dimension on (03) 9844 1944
+                </p>
             </form>
         </div>
     </section>

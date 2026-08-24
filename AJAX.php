@@ -1,4 +1,5 @@
 <?php
+session_start();
 include 'config/data.php';
 include 'class/log.php';
 include 'class/subscription.php';
@@ -21,9 +22,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $method = $_POST['method'];
 
     if ($method === 'getActiveSubscription') {
+        requireAdminSession();
         getActiveSubscription($conn);
     } else if ($method === 'getCancelledSubscription') {
+        requireAdminSession();
         getCancelledSubscription($conn);
+    } else if ($method === 'getLockedSchools') {
+        requireAdminSession();
+        getLockedSchools($conn);
     }
     else if($method == "updateProfile") 
     {
@@ -40,11 +46,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo json_encode(["error" => "Invalid request"]);
 }
 
+function requireAdminSession()
+{
+    if (
+        !isset($_SESSION['admin_login_status']) ||
+        $_SESSION['admin_login_status'] !== 'true'
+    ) {
+        http_response_code(401);
+        echo json_encode(['error' => 'Unauthorized']);
+        exit;
+    }
+}
+
 function getActiveSubscription($conn) {
     // Select schools where EITHER the Games OR the Curriculum is currently active
-    $sql = "SELECT * FROM school_master 
-WHERE subscription_end > NOW() 
-OR curriculum_end > NOW();";
+    $sql = "SELECT id, school_name, school_admin_email,
+        subscription_id, subscription_start, subscription_end, status, cancel_at,
+        curriculum_sub_id, curriculum_start, curriculum_end, curriculum_status, curriculum_cancel_at
+        FROM school_master 
+        WHERE subscription_end > NOW() 
+        OR curriculum_end > NOW();";
     
     $result = $conn->query($sql);
 
@@ -60,13 +81,34 @@ OR curriculum_end > NOW();";
     echo json_encode($data);
 }
 function getCancelledSubscription($conn) {
-    $sql = "SELECT * FROM school_master 
-WHERE subscription_end > NOW() 
-OR curriculum_end > NOW();";
+    $sql = "SELECT id, school_name, school_admin_email,
+        subscription_id, subscription_start, subscription_end, status, cancel_at,
+        curriculum_sub_id, curriculum_start, curriculum_end, curriculum_status, curriculum_cancel_at
+        FROM school_master 
+        WHERE subscription_end > NOW() 
+        OR curriculum_end > NOW();";
     $result = $conn->query($sql);
 
     $data = [];
     if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+    }
+
+    echo json_encode($data);
+}
+function getLockedSchools($conn) {
+    $sql = "SELECT id, school_name, school_admin_email, failed_login_attempts, login_locked_until
+            FROM school_master
+            WHERE login_locked_until IS NOT NULL
+            AND login_locked_until > NOW()
+            ORDER BY login_locked_until DESC";
+
+    $result = $conn->query($sql);
+
+    $data = [];
+    if ($result && $result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $data[] = $row;
         }

@@ -790,42 +790,6 @@ $app_store_link = $dataObj->getAppSetting('apple_store_link') ?? '0';
         window.addEventListener("scroll", fadeInOnScroll);
     });
 
-    var stripe = Stripe("<?= htmlspecialchars($stripePk) ?>");
-
-    // document.getElementById('checkout-button').addEventListener('click', function () {
-    //     fetch('checkout.php')
-    //         .then(response => response.json())
-    //         .then(data => {
-    //             if (data.error) {
-    //                 alert(data.error);
-    //                 return;
-    //             }
-    //             return stripe.redirectToCheckout({ sessionId: data.id });
-    //         })
-    //         .then(result => {
-    //             if (result && result.error) {
-    //                 alert(result.error.message);
-    //             }
-    //         });
-    // });
-
-    // document.getElementById('checkout-button-curriculum').addEventListener('click', function () {
-    //     fetch('checkout_curriculum.php')
-    //         .then(response => response.json())
-    //         .then(data => {
-    //             if (data.error) {
-    //                 alert(data.error);
-    //                 return;
-    //             }
-    //             return stripe.redirectToCheckout({ sessionId: data.id });
-    //         })
-    //         .then(result => {
-    //             if (result && result.error) {
-    //                 alert(result.error.message);
-    //             }
-    //         });
-    // });
-       
 </script>
 <script>
 //AOS animate on scroll
@@ -851,52 +815,24 @@ $app_store_link = $dataObj->getAppSetting('apple_store_link') ?? '0';
                 <h3>Order Summary</h3>
                 <div class="product-box">
                     <span id="displayProductName" class="product-name">Wellbeing Games</span>
-                    <span id="displayProductPrice" class="product-price">£XX.XX/mo</span>
+                    <span id="displayProductPrice" class="product-price">AUD 0.00</span>
                 </div>
-                <p class="summary-note">We will verify your email before proceeding to secure payment via Stripe.</p>
+                <p class="summary-note">If you have problems subscribing please call Youth Dimension on (03) 9844 1944</p>
             </div>
 
             <div class="auth-section">
                 <h2>Get Started</h2>
                 
                 <div id="emailSection">
-                    <p>Enter your email to receive a verification code.</p>
+                    <p>Enter your school admin email to continue.</p>
                     <div class="input-group">
                         <input type="email" id="subscriberEmail" placeholder="School Admin Email" required>
                     </div>
-                    <button class="action-btn" id="sendOtpBtn" onclick="sendOTP()">
-                        <span class="btn-text">Send Code</span>
+                    <button class="action-btn" id="continuePaymentBtn" onclick="continueToPayment()">
+                        <span class="btn-text">Continue to Payment</span>
                         <div class="loader hidden"></div>
                     </button>
-                </div>
-
-                <div id="otpSection" class="hidden">
-                    <div id="schoolWelcome" class="hidden" style="background: #eefbff; padding: 12px; border-radius: 8px; margin-bottom: 15px; border-left: 5px solid #004666;">
-                        <p style="margin: 0; font-size: 0.85rem; color: #666; text-transform: uppercase; letter-spacing: 0.5px;">Recognized School:</p>
-                        <strong id="modalSchoolName" style="color: #004666; font-size: 1.1rem; display: block; margin-top: 2px;"></strong>
-                    </div>
-                    <p>Enter the 6-digit code sent to your email.</p>
-                    <div class="otp-input-wrapper">
-                        <input type="text" maxlength="1" class="otp-digit" id="otp-1">
-                        <input type="text" maxlength="1" class="otp-digit" id="otp-2">
-                        <input type="text" maxlength="1" class="otp-digit" id="otp-3">
-                        <input type="text" maxlength="1" class="otp-digit" id="otp-4">
-                        <input type="text" maxlength="1" class="otp-digit" id="otp-5">
-                        <input type="text" maxlength="1" class="otp-digit" id="otp-6">
-                    </div>
-                    
-                    <button class="action-btn" id="verifyOtpBtn" onclick="verifyOTP()">
-                        <span class="btn-text">Verify & Pay</span>
-                        <div class="loader hidden"></div>
-                    </button>
-
-                    <div class="resend-container">
-                        <p id="timerText">Resend code in <span id="countdown">60</span>s</p>
-                        <button id="resendBtn" class="resend-link hidden" onclick="sendOTP()">
-                            <span class="btn-text">Resend Code</span>
-                            <div class="loader hidden"></div>
-                        </button>
-                    </div>
+                    <p class="subscription-help">If you have problems subscribing please call<br>Youth Dimension on (03) 9844 1944</p>
                 </div>
             </div>
         </div>
@@ -914,11 +850,6 @@ $app_store_link = $dataObj->getAppSetting('apple_store_link') ?? '0';
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    .resend-container { margin-top: 15px; font-size: 0.9rem; }
-    .resend-link { 
-        background: none; border: none; color: #b77c72; 
-        text-decoration: underline; cursor: pointer; font-weight: bold;
-    }
     .hidden { display: none !important; }
     .modal-overlay {
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -930,8 +861,6 @@ $app_store_link = $dataObj->getAppSetting('apple_store_link') ?? '0';
         position: relative; overflow: hidden; animation: slideUp 0.3s ease-out;
     }
     .modal-content { display: flex; flex-wrap: wrap; }
-    
-    /* Summary Side */
     .order-summary {
         flex: 1; background: #f8f9fa; padding: 40px; min-width: 300px;
         border-right: 1px solid #eee;
@@ -942,8 +871,6 @@ $app_store_link = $dataObj->getAppSetting('apple_store_link') ?? '0';
     }
     .product-name { display: block; font-weight: bold; font-size: 1.2rem; }
     .product-price { color: #b77c72; font-size: 1.5rem; font-weight: bold; }
-
-    /* Auth Side */
     .auth-section { flex: 1.2; padding: 40px; min-width: 300px; text-align: center; }
     .input-group input {
         width: 100%; padding: 15px; border-radius: 10px; 
@@ -953,30 +880,13 @@ $app_store_link = $dataObj->getAppSetting('apple_store_link') ?? '0';
         background: #b77c72; color: white; border: none; padding: 15px 40px;
         border-radius: 30px; font-weight: bold; cursor: pointer; width: 100%;
     }
+    .subscription-help { margin: 18px 0 0; color: #555; font-size: 0.95rem; line-height: 1.5; }
 
-    /* OTP Inputs */
-    .otp-input-wrapper { display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; }
-    .otp-digit {
-        width: 45px; height: 55px; text-align: center; font-size: 1.5rem;
-        border: 2px solid #ddd; border-radius: 10px;
-    }
-
-    
     @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     .close-modal { position: absolute; top: 15px; right: 20px; font-size: 2rem; border: none; background: none; cursor: pointer; }
 </style>
 <script>
     let selectedType = "";
-
-    // Open Modal for Games
-    document.getElementById('checkout-button').addEventListener('click', function() {
-        openSubModal("wellbeing_games", "Wellbeing Games", "£10.00");
-    });
-
-    // Open Modal for Curriculum
-    document.getElementById('checkout-button-curriculum').addEventListener('click', function() {
-        openSubModal("curriculum", "Curriculum Access", "£25.00");
-    });
     const productData = <?php echo $products_json; ?>;
     
     function openSubModal(type) {
@@ -989,115 +899,55 @@ $app_store_link = $dataObj->getAppSetting('apple_store_link') ?? '0';
 
         selectedType = type;
 
-        // --- RESET MODAL STATE ---
-        // 1. Clear text inputs
         document.getElementById('subscriberEmail').value = '';
-        
-        // 2. Clear all 6 OTP digit boxes
-        document.querySelectorAll('.otp-digit').forEach(input => {
-            input.value = '';
-        });
+        const continueBtn = document.getElementById('continuePaymentBtn');
+        continueBtn.disabled = false;
+        continueBtn.querySelector('.btn-text').innerText = 'Continue to Payment';
+        continueBtn.querySelector('.loader').classList.add('hidden');
 
-        // 3. Reset Section Visibility (Show email, hide OTP)
-        document.getElementById('emailSection').classList.remove('hidden');
-        document.getElementById('otpSection').classList.add('hidden');
-        document.getElementById('schoolWelcome').classList.add('hidden');
-        
-        // 4. Reset Button States (In case they were stuck on 'Loading')
-        const sendBtn = document.getElementById('sendOtpBtn');
-        sendBtn.disabled = false;
-        sendBtn.querySelector('.btn-text').innerText = 'Send Code';
-        sendBtn.querySelector('.loader').classList.add('hidden');
-
-        // --- UPDATE UI ---
         document.getElementById('displayProductName').innerText = product.display_name;
         document.getElementById('displayProductPrice').innerText = 
             product.currency + ' ' + parseFloat(product.price_amount).toFixed(2);
 
         document.getElementById('subscriptionModal').classList.remove('hidden');
     }
-    let timerInterval;
 
-    // --- 1. OTP Input Handling (Backspace & Auto-focus) ---
-    const otpInputs = document.querySelectorAll('.otp-digit');
-    otpInputs.forEach((input, index) => {
-        // Handle typing
-        input.addEventListener('input', (e) => {
-            if (e.inputType === "deleteContentBackward") return; // Skip if backspacing
-            if (input.value.length === 1 && index < otpInputs.length - 1) {
-                otpInputs[index + 1].focus();
-            }
-        });
-
-        // Handle Backspace
-        input.addEventListener('keydown', (e) => {
-            if (e.key === "Backspace" && input.value === "" && index > 0) {
-                otpInputs[index - 1].focus();
-            }
-        });
-    });
     function validateEmail(email) {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return re.test(email.toLowerCase());
     }
 
-    // This is the function we'll call when they click "Send Code"
-    async function sendOTP() {
-        const email = document.getElementById('subscriberEmail').value;
-        const sendBtn = document.getElementById('sendOtpBtn');
-        const resendBtn = document.getElementById('resendBtn');
-        
-        // Elements for the School Name display
-        const schoolWelcomeDiv = document.getElementById('schoolWelcome');
-        const schoolNameSpan = document.getElementById('modalSchoolName');
+    async function continueToPayment() {
+        const emailInput = document.getElementById('subscriberEmail');
+        const email = emailInput.value.trim();
+        const continueBtn = document.getElementById('continuePaymentBtn');
 
         if(!email) {
             showAlert("Please enter a valid school email.");
-            
+            emailInput.focus();
             return;
         }
+
         if (!validateEmail(email)) {
             showAlert("Please enter a valid email format (e.g., name@school.com).");
             emailInput.style.borderColor = "red";
             emailInput.focus();
             return;
         }
-        // 1. Determine which button triggered the call for the loader
-        const activeBtn = !resendBtn.classList.contains('hidden') ? resendBtn : sendBtn;
 
-        // 2. UI Reset: Clear OTP boxes and show loading
-        const otpInputs = document.querySelectorAll('.otp-digit'); // Ensure this is defined
-        otpInputs.forEach(input => input.value = ""); 
-        toggleLoader(activeBtn, true);
+        emailInput.style.borderColor = "";
+        toggleLoader(continueBtn, true);
 
         const formData = new FormData();
         formData.append('email', email);
         formData.append('product_key', selectedType);
 
         try {
-            const response = await fetch('process_otp_request.php', { method: 'POST', body: formData });
+            const response = await fetch('process_subscription_request.php', { method: 'POST', body: formData });
             const result = await response.json();
 
             if(result.status === 'success') {
-                // --- NEW LOGIC: Show School Name if it exists ---
-                if (result.school_name) {
-                    schoolNameSpan.innerText = result.school_name;
-                    schoolWelcomeDiv.classList.remove('hidden');
-                } else {
-                    // Hide it if it's a new user (in case they previously typed an existing email)
-                    schoolWelcomeDiv.classList.add('hidden');
-                }
-                // --- END NEW LOGIC ---
-
-                // Switch views
-                document.getElementById('emailSection').classList.add('hidden');
-                document.getElementById('otpSection').classList.remove('hidden');
-                
-                // Auto-focus the first box
-                if(otpInputs.length > 0) otpInputs[0].focus();
-
-                // 3. Restart the countdown timer
-                startResendTimer();
+                window.location.href = result.checkout_url;
             } else {
                 showAlert(result.message);
             }
@@ -1105,34 +955,12 @@ $app_store_link = $dataObj->getAppSetting('apple_store_link') ?? '0';
             console.error(e);
             alert("Connection error. Please try again.");
         } finally {
-            toggleLoader(activeBtn, false);
+            toggleLoader(continueBtn, false);
         }
     }
-    function startResendTimer() {
-        let timeLeft = 60;
-        const countdownEl = document.getElementById('countdown');
-        const timerText = document.getElementById('timerText');
-        const resendBtn = document.getElementById('resendBtn');
 
-        resendBtn.classList.add('hidden');
-        timerText.classList.remove('hidden');
-
-        clearInterval(timerInterval);
-        timerInterval = setInterval(() => {
-            timeLeft--;
-            countdownEl.innerText = timeLeft;
-            if (timeLeft <= 0) {
-                clearInterval(timerInterval);
-                timerText.classList.add('hidden');
-                resendBtn.classList.remove('hidden');
-            }
-        }, 1000);
-    }
-
-    // Helper for Button Loading
     function toggleLoader(btn, show) {
         const loader = btn.querySelector('.loader');
-        const text = btn.querySelector('.btn-text');
         if(show) {
             loader.classList.remove('hidden');
             btn.disabled = true;
@@ -1141,66 +969,10 @@ $app_store_link = $dataObj->getAppSetting('apple_store_link') ?? '0';
             btn.disabled = false;
         }
     }
-    async function verifyOTP() {
-        const otpInputs = document.querySelectorAll('.otp-digit');
-        let otpCode = "";
-        
-        // 1. Collect and concatenate the 6 digits
-        otpInputs.forEach(input => {
-            otpCode += input.value;
-        });
-
-        if (otpCode.length < 6) {
-            alert("Please enter the full 6-digit code.");
-            return;
-        }
-
-        // 2. Show loading state on the button
-        const verifyBtn = document.querySelector('#otpSection .action-btn');
-        const originalText = verifyBtn.innerText;
-        verifyBtn.innerText = "Verifying...";
-        verifyBtn.disabled = true;
-
-        try {
-            const formData = new FormData();
-            formData.append('otp', otpCode);
-            // selectedType was set when the modal opened
-            formData.append('product_key', selectedType); 
-
-            // 3. Send to backend
-            const response = await fetch('verify_otp_and_pay.php', {
-                method: 'POST',
-                body: formData
-            });
-            
-            const result = await response.json();
-
-            if (result.status === 'success') {
-                // 4. Redirect to Stripe Checkout URL
-                window.location.href = result.checkout_url;
-            } else {
-                alert(result.message || "Invalid code. Please try again.");
-                verifyBtn.innerText = originalText;
-                verifyBtn.disabled = false;
-            }
-        } catch (error) {
-            console.error("Verification error:", error);
-            alert("Connection error. Please check your internet.");
-            verifyBtn.innerText = originalText;
-            verifyBtn.disabled = false;
-        }
-    }
 
     function closeModal() {
         document.getElementById('subscriptionModal').classList.add('hidden');
     }
-
-    // Auto-tab for OTP inputs
-    document.querySelectorAll('.otp-digit').forEach((input, index, inputs) => {
-        input.addEventListener('input', () => {
-            if (input.value.length === 1 && index < inputs.length - 1) inputs[index + 1].focus();
-        });
-    });
 
     let alertTimeout;
 

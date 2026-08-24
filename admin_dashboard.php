@@ -10,15 +10,13 @@ include 'objects/schooldata.php';
 // dynamic css
 include 'assets/css/pages/dynamicss.php';
 
-
 $login_url = "admin_login.php";
-if(isset($_SESSION['admin_login_status'])){
-	if($_SESSION['admin_login_status'] !=  "true"){
-		header("Location: $login_url");	
-	}
-}
-else{
-	header("Location: $login_url");	
+if (
+    !isset($_SESSION['admin_login_status']) ||
+    $_SESSION['admin_login_status'] !== "true"
+) {
+	header("Location: $login_url");
+    exit();
 }
 $_data = new Data();
 
@@ -125,6 +123,10 @@ $classroom_on = $_data->getAppSetting('enable_classroom_setup') ?? '0';
                     <div class="action-box" id="activeSubcriptions">
                         <p>Schools with Active Subscriptions</p>
                         <i class="fas fa-tools action-icon"></i>
+                    </div>
+                    <div class="action-box" id="lockedSchools">
+                        <p>Locked Schools</p>
+                        <i class="fas fa-lock action-icon"></i>
                     </div>
                     <div class="action-box" id="gameResults">
                         <p>Wellbeging Results + Game Score Results</p>
@@ -595,6 +597,43 @@ $classroom_on = $_data->getAppSetting('enable_classroom_setup') ?? '0';
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="setSchoolPasswordModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title"><i class="fas fa-key"></i> Set School Password</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="setSchoolPasswordForm">
+                <div class="modal-body">
+                    <input type="hidden" id="passwordSchoolId" name="school_id">
+                    <div class="mb-3">
+                        <label class="form-label">School</label>
+                        <div id="passwordSchoolName" class="fw-bold"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <div id="passwordSchoolEmail" class="text-muted"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="newSchoolPassword" class="form-label">New Password</label>
+                        <input type="password" id="newSchoolPassword" name="new_password" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirmSchoolPassword" class="form-label">Confirm New Password</label>
+                        <input type="password" id="confirmSchoolPassword" name="confirm_password" class="form-control" required>
+                    </div>
+                    <div id="passwordModalError" class="text-danger small"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Set Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
     
 </body>
 <script>
@@ -605,6 +644,15 @@ $classroom_on = $_data->getAppSetting('enable_classroom_setup') ?? '0';
 	document.getElementById('daTableRecords').style.display = 'block';
     document.getElementById('dataTitleText').innerText = "Active Subscriptions";
     getSubscriptions("active");
+  };
+  document.getElementById('lockedSchools').onclick = function() {
+    document.getElementById('actionRow').style.display = 'none';
+	document.getElementById('divGameResults').style.display = 'none';
+    document.getElementById('dataTableDiv').style.display = 'block';
+	document.getElementById('daTableRecords').style.display = 'block';
+    document.getElementById('dataTitleText').style.display = 'block';
+    document.getElementById('dataTitleText').innerText = "Locked Schools";
+    getLockedSchools();
   };
 //   document.getElementById('cancelledSubcriptions').onclick = function() {
 //     document.getElementById('actionRow').style.display = 'none';
@@ -667,6 +715,7 @@ function getSubscriptions(type) {
     '<th>School Details</th>' +
     '<th>Wellbeing Games Status</th>' +
     '<th>Curriculum Status</th>' +
+    '<th>Actions</th>' +
     '</tr>' +
     '</thead>' +
     '<tbody>';
@@ -721,6 +770,8 @@ response.forEach(function(row) {
         '</td>' +
         '<td>' + gamesBadge + '<br><small>' + gamesDates + '</small></td>' +
         '<td>' + currBadge + '<br><small>' + currDates + '</small></td>' +
+        '<td><button type="button" class="btn btn-sm btn-primary" onclick="openSetPasswordModal(' +
+            row.id + ', \'' + escapeJs(row.school_name) + '\', \'' + escapeJs(row.school_admin_email) + '\')">Set New Password</button></td>' +
         '</tr>';
     n++;
 });
@@ -739,6 +790,122 @@ $('#dataTable').DataTable();
 });
  
 }
+
+function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, function(match) {
+        return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'}[match];
+    });
+}
+
+function escapeJs(value) {
+    return String(value ?? '').replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\r?\n/g, ' ');
+}
+
+function getLockedSchools() {
+    $('#daTableRecords').html("");
+    $.ajax({
+        url: 'AJAX.php',
+        type: 'POST',
+        data: { method: 'getLockedSchools' },
+        dataType: 'json',
+        success: function(response) {
+            if (response.error) {
+                showAlert(response.error);
+                return;
+            }
+
+            var tableHtml =
+                '<table id="dataTable" class="table table-bordered table-striped">' +
+                '<thead><tr>' +
+                '<th>School Details</th>' +
+                '<th>Failed Attempts</th>' +
+                '<th>Locked Until</th>' +
+                '<th>Actions</th>' +
+                '</tr></thead><tbody>';
+
+            response.forEach(function(row) {
+                tableHtml += '<tr>' +
+                    '<td><strong>' + escapeHtml(row.school_name) + '</strong><br><small class="text-muted">' + escapeHtml(row.school_admin_email) + '</small></td>' +
+                    '<td>' + escapeHtml(row.failed_login_attempts) + '</td>' +
+                    '<td>' + escapeHtml(row.login_locked_until) + '</td>' +
+                    '<td>' +
+                        '<button type="button" class="btn btn-sm btn-success me-2" onclick="unlockSchool(' + row.id + ')">Unlock Account</button>' +
+                        '<button type="button" class="btn btn-sm btn-primary" onclick="openSetPasswordModal(' + row.id + ', \'' + escapeJs(row.school_name) + '\', \'' + escapeJs(row.school_admin_email) + '\')">Set New Password</button>' +
+                    '</td>' +
+                '</tr>';
+            });
+
+            tableHtml += '</tbody></table>';
+            $('#daTableRecords').html(tableHtml);
+            $('#dataTable').DataTable();
+        },
+        error: function() {
+            showAlert('Could not load locked schools.');
+        }
+    });
+}
+
+function unlockSchool(schoolId) {
+    if (!confirm('Unlock login access for this school?')) {
+        return;
+    }
+
+    $.ajax({
+        url: 'admin_unlock_school.php',
+        type: 'POST',
+        data: { school_id: schoolId },
+        dataType: 'json',
+        success: function(response) {
+            if (response.status === 'success') {
+                showAlert(response.message, 'success');
+                getLockedSchools();
+            } else {
+                showAlert(response.message || 'Unable to unlock account.');
+            }
+        },
+        error: function() {
+            showAlert('Unable to unlock account.');
+        }
+    });
+}
+
+function openSetPasswordModal(schoolId, schoolName, schoolEmail) {
+    $('#passwordSchoolId').val(schoolId);
+    $('#passwordSchoolName').text(schoolName);
+    $('#passwordSchoolEmail').text(schoolEmail);
+    $('#newSchoolPassword').val('');
+    $('#confirmSchoolPassword').val('');
+    $('#passwordModalError').text('');
+    bootstrap.Modal.getOrCreateInstance(document.getElementById('setSchoolPasswordModal')).show();
+}
+
+$('#setSchoolPasswordForm').on('submit', function(e) {
+    e.preventDefault();
+    $('#passwordModalError').text('');
+
+    $.ajax({
+        url: 'admin_set_school_password.php',
+        type: 'POST',
+        data: $(this).serialize(),
+        dataType: 'json',
+        success: function(response) {
+            if (response.status === 'success') {
+                $('#newSchoolPassword').val('');
+                $('#confirmSchoolPassword').val('');
+                bootstrap.Modal.getInstance(document.getElementById('setSchoolPasswordModal')).hide();
+                showAlert('Password updated successfully. The school can now log in with the new password.', 'success');
+                if ($('#dataTitleText').text() === 'Locked Schools') {
+                    getLockedSchools();
+                }
+            } else {
+                $('#passwordModalError').text(response.message || 'Unable to update password.');
+            }
+        },
+        error: function() {
+            $('#passwordModalError').text('Unable to update password.');
+        }
+    });
+});
 </script>
 
 <script src="assets/ckeditor/ckeditor.js"></script>

@@ -183,7 +183,14 @@ class Subscription{
 	}
 	
 	public function get_user_by_email($email){
-		$_query = "select * from school_master where school_admin_email = '$email'";
+		$_query = "select id, name, email, school_name, school_admin_email, password,
+			subscription_id, curriculum_sub_id, subscription_start, curriculum_start,
+			subscription_end, curriculum_end, curriculum_status, status,
+			subscription_type, created_on, customer_id, subscription_status_id,
+			cancel_at, cancel_at_period_end, modified_on, curriculum_cancel_at,
+			curriculum_cancel_at_period_end, failed_login_attempts,
+			first_failed_login_at, login_locked_until
+			from school_master where school_admin_email = '$email'";
 		return $this->data->getData($_query);
 	}
 	public function get_admin_user_by_email($email){

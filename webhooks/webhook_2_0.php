@@ -52,56 +52,26 @@ if ($event->type === 'checkout.session.completed') {
         $type = $session->metadata->product_key ?? 'wellbeing_games'; 
         $product_name = ($type === 'curriculum') ? 'Wellbeing Curriculum' : 'Wellbeing Games';
 
-        $checkAccount = $_data->getData("SELECT id FROM school_master WHERE school_admin_email = '$customer_email' LIMIT 1");
-
-        if (!empty($checkAccount)) {
-            $school_id = $checkAccount[0]['id'];
-            if ($type === 'curriculum') {
-                $sql = "UPDATE school_master SET 
-                        curriculum_sub_id = '$subscription_id', 
-                        customer_id = '$customer_id',
-                        curriculum_status = 'active',
-                        curriculum_start = '$start_date',
-                        curriculum_end = '$end_date',
-                        curriculum_cancel_at_period_end = 0,
-                        curriculum_cancel_at = NULL
-                        WHERE id = $school_id";
-            } else {
-                $sql = "UPDATE school_master SET 
-                        subscription_id = '$subscription_id', 
-                        customer_id = '$customer_id',
-                        status = 'active',
-                        subscription_start = '$start_date',
-                        subscription_end = '$end_date',
-                        cancel_at_period_end = 0,
-                        cancel_at = NULL
-                        WHERE id = $school_id";
-            }
-            $_data->execute($sql);
-            saveAuditSnapshot($_data, $school_id, 'CHECKOUT_COMPLETED');
-
-        } else {
-            $updateTemp = "UPDATE temp_school_master SET 
-                        payment_status = 'paid', 
-                        stripe_subscription_id = '$subscription_id',
-                        customer_id = '$customer_id',
-                        start_date = '$start_date',
-                        end_date = '$end_date',
-                        product_key = '$type' 
-                        WHERE stripe_session_id = '$session_id'";
-            $_data->execute($updateTemp);
-            
-            $emailHelper = new EmailHelper();
-            $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
-            $finishUrl = $protocol . "://" . $_SERVER['HTTP_HOST'] . "/signup.php?s=" . $session_id;
-            
-            $variables = ['finish_url' => $finishUrl, 'email' => $customer_email, 'product_name' => $product_name];
-            $templatePath = dirname(__DIR__) . '/template_welcome_finish_signup.tl';
-            $message = $emailHelper->getEmailTemplate($templatePath, $variables);
-            
-            if ($message) {
-                $emailHelper->sendEmail($customer_email, "Welcome! Finalize your Happy House account", $message, 'welcome_finish_signup');
-            }
+        $updateTemp = "UPDATE temp_school_master SET 
+                    payment_status = 'paid', 
+                    stripe_subscription_id = '$subscription_id',
+                    customer_id = '$customer_id',
+                    start_date = '$start_date',
+                    end_date = '$end_date',
+                    product_key = '$type' 
+                    WHERE stripe_session_id = '$session_id'";
+        $_data->execute($updateTemp);
+        
+        $emailHelper = new EmailHelper();
+        $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
+        $finishUrl = $protocol . "://" . $_SERVER['HTTP_HOST'] . "/signup.php?s=" . $session_id . "&type=" . $type;
+        
+        $variables = ['finish_url' => $finishUrl, 'email' => $customer_email, 'product_name' => $product_name];
+        $templatePath = dirname(__DIR__) . '/template_welcome_finish_signup.tl';
+        $message = $emailHelper->getEmailTemplate($templatePath, $variables);
+        
+        if ($message) {
+            $emailHelper->sendEmail($customer_email, "Welcome! Finalize your Happy House account", $message, 'welcome_finish_signup');
         }
     } catch (Exception $e) {
         file_put_contents('logs.txt', "Checkout Error: " . $e->getMessage() . "\n", FILE_APPEND);
