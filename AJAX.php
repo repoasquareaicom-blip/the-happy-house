@@ -100,15 +100,29 @@ function getCancelledSubscription($conn) {
     echo json_encode($data);
 }
 function getLockedSchools($conn) {
+    $keyword = isset($_POST['keyword']) ? trim($_POST['keyword']) : '';
     $sql = "SELECT id, school_name, school_admin_email, failed_login_attempts, login_locked_until
             FROM school_master
             WHERE login_locked_until IS NOT NULL
-            AND login_locked_until > NOW()
-            ORDER BY login_locked_until DESC";
+            AND login_locked_until > NOW()";
 
-    $result = $conn->query($sql);
+    if ($keyword !== '') {
+        $sql .= " AND (school_name LIKE ? OR school_admin_email LIKE ?)";
+    }
+
+    $sql .= " ORDER BY login_locked_until DESC";
 
     $data = [];
+    if ($keyword !== '') {
+        $search_keyword = '%' . $keyword . '%';
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('ss', $search_keyword, $search_keyword);
+        $stmt->execute();
+        $result = $stmt->get_result();
+    } else {
+        $result = $conn->query($sql);
+    }
+
     if ($result && $result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $data[] = $row;
@@ -118,16 +132,30 @@ function getLockedSchools($conn) {
     echo json_encode($data);
 }
 function getSchoolLoginSupport($conn) {
+    $keyword = isset($_POST['keyword']) ? trim($_POST['keyword']) : '';
     $sql = "SELECT id, school_name, school_admin_email, failed_login_attempts,
             IF(login_locked_until IS NOT NULL AND login_locked_until > NOW(), 'Locked', 'Active') AS login_status
             FROM school_master
             WHERE school_admin_email IS NOT NULL
-            AND school_admin_email <> ''
-            ORDER BY school_name ASC";
+            AND school_admin_email <> ''";
 
-    $result = $conn->query($sql);
+    if ($keyword !== '') {
+        $sql .= " AND (school_name LIKE ? OR school_admin_email LIKE ?)";
+    }
+
+    $sql .= " ORDER BY school_name ASC";
 
     $data = [];
+    if ($keyword !== '') {
+        $search_keyword = '%' . $keyword . '%';
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('ss', $search_keyword, $search_keyword);
+        $stmt->execute();
+        $result = $stmt->get_result();
+    } else {
+        $result = $conn->query($sql);
+    }
+
     if ($result && $result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $data[] = $row;

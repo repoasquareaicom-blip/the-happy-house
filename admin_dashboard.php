@@ -641,6 +641,9 @@ $classroom_on = $_data->getAppSetting('enable_classroom_setup') ?? '0';
     
 </body>
 <script>
+  var schoolLoginSupportKeyword = '';
+  var lockedSchoolsKeyword = '';
+
   document.getElementById('activeSubcriptions').onclick = function() {
     document.getElementById('actionRow').style.display = 'none';
 	document.getElementById('divGameResults').style.display = 'none';
@@ -650,6 +653,7 @@ $classroom_on = $_data->getAppSetting('enable_classroom_setup') ?? '0';
     getSubscriptions("active");
   };
   document.getElementById('schoolLoginSupport').onclick = function() {
+    schoolLoginSupportKeyword = '';
     document.getElementById('actionRow').style.display = 'none';
 	document.getElementById('divGameResults').style.display = 'none';
     document.getElementById('dataTableDiv').style.display = 'block';
@@ -659,6 +663,7 @@ $classroom_on = $_data->getAppSetting('enable_classroom_setup') ?? '0';
     getSchoolLoginSupport();
   };
   document.getElementById('lockedSchools').onclick = function() {
+    lockedSchoolsKeyword = '';
     document.getElementById('actionRow').style.display = 'none';
 	document.getElementById('divGameResults').style.display = 'none';
     document.getElementById('dataTableDiv').style.display = 'block';
@@ -803,12 +808,48 @@ function escapeJs(value) {
     return String(value ?? '').replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\r?\n/g, ' ');
 }
 
+function renderSchoolSearchControls(inputId, searchFunctionName, clearFunctionName, keyword) {
+    return '<div class="mb-3 d-flex align-items-center flex-wrap" style="gap: 8px;">' +
+        '<label for="' + inputId + '" class="mb-0 fw-bold">Search School / Email:</label>' +
+        '<input type="text" id="' + inputId + '" class="form-control" style="max-width: 360px;" value="' + escapeHtml(keyword) + '" onkeydown="handleSchoolSearchEnter(event, \'' + searchFunctionName + '\')">' +
+        '<button type="button" class="btn btn-primary" onclick="' + searchFunctionName + '()">Search</button>' +
+        '<button type="button" class="btn btn-secondary" onclick="' + clearFunctionName + '()">Clear</button>' +
+    '</div>';
+}
+
+function handleSchoolSearchEnter(event, searchFunctionName) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        window[searchFunctionName]();
+    }
+}
+
+function searchLockedSchools() {
+    lockedSchoolsKeyword = $('#lockedSchoolsSearchKeyword').val().trim();
+    getLockedSchools();
+}
+
+function clearLockedSchoolsSearch() {
+    lockedSchoolsKeyword = '';
+    getLockedSchools();
+}
+
+function searchSchoolLoginSupport() {
+    schoolLoginSupportKeyword = $('#schoolLoginSupportSearchKeyword').val().trim();
+    getSchoolLoginSupport();
+}
+
+function clearSchoolLoginSupportSearch() {
+    schoolLoginSupportKeyword = '';
+    getSchoolLoginSupport();
+}
+
 function getLockedSchools() {
     $('#daTableRecords').html("");
     $.ajax({
         url: 'AJAX.php',
         type: 'POST',
-        data: { method: 'getLockedSchools' },
+        data: { method: 'getLockedSchools', keyword: lockedSchoolsKeyword },
         dataType: 'json',
         success: function(response) {
             if (response.error) {
@@ -816,7 +857,7 @@ function getLockedSchools() {
                 return;
             }
 
-            var tableHtml =
+            var tableHtml = renderSchoolSearchControls('lockedSchoolsSearchKeyword', 'searchLockedSchools', 'clearLockedSchoolsSearch', lockedSchoolsKeyword) +
                 '<table id="dataTable" class="table table-bordered table-striped">' +
                 '<thead><tr>' +
                 '<th>School Details</th>' +
@@ -851,7 +892,7 @@ function getSchoolLoginSupport() {
     $.ajax({
         url: 'AJAX.php',
         type: 'POST',
-        data: { method: 'getSchoolLoginSupport' },
+        data: { method: 'getSchoolLoginSupport', keyword: schoolLoginSupportKeyword },
         dataType: 'json',
         success: function(response) {
             if (response.error) {
@@ -859,7 +900,7 @@ function getSchoolLoginSupport() {
                 return;
             }
 
-            var tableHtml =
+            var tableHtml = renderSchoolSearchControls('schoolLoginSupportSearchKeyword', 'searchSchoolLoginSupport', 'clearSchoolLoginSupportSearch', schoolLoginSupportKeyword) +
                 '<table id="dataTable" class="table table-bordered table-striped">' +
                 '<thead><tr>' +
                 '<th>School Details</th>' +
